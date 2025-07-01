@@ -16,7 +16,7 @@ function Cart() {
           },
           body: JSON.stringify({
             cartItems: cartarray,
-            email: "vermav12346@gmail.com", // Hardcoded for testing
+            email: "vermav12346@gmail.com",
           }),
         }
       );
