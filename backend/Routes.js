@@ -8,9 +8,9 @@ require("dotenv").config()
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); 
 
 router.post("/checkout-session", async (req, res) => {
-  console.log("Request Body:", req.body); // Log the entire body
+  
   const { cartItems, email } = req.body;
-  console.log("Email:", email); // Confirm email is extracted
+
 
   const lineItems = cartItems.map((item) => ({
     price_data: {
@@ -69,7 +69,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET user cart
 router.get("/cart/:userId", async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.params.userId });
@@ -79,7 +78,7 @@ router.get("/cart/:userId", async (req, res) => {
   }
 });
 
-// ADD item to cart
+
 router.post("/additem", async (req, res) => {
   try {
     const { userId, item } = req.body;
@@ -104,7 +103,7 @@ router.post("/additem", async (req, res) => {
   }
 });
 
-// DELETE item from cart
+
 router.delete("/deleteitem/:userId/:productid", async (req, res) => {
   try {
     const { userId, productid } = req.params;
@@ -117,7 +116,7 @@ router.delete("/deleteitem/:userId/:productid", async (req, res) => {
       await cartexist.save();
     }
 
-    // ✅ Update product schema to mark not added
+    
     await Product.updateOne(
       { id: productid },
       { $set: { addedAlready: false } }
@@ -129,7 +128,7 @@ router.delete("/deleteitem/:userId/:productid", async (req, res) => {
   }
 });
 
-// UPDATE item quantity
+
 router.patch("/updatequantity/:userId/:productid", async (req, res) => {
   try {
     const { userId, productid } = req.params;
