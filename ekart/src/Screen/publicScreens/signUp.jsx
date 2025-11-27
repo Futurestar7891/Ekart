@@ -10,7 +10,7 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const Signup = () => {
-  const API = import.meta.env.API;
+  const API = import.meta.env.VITE_API;
   const navigate = useNavigate();
   const { setIsLoggedIn, setUser } = useContext(AppContext);
 

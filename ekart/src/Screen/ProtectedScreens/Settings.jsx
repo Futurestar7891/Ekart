@@ -4,7 +4,7 @@ import VerifyOtp from "../publicScreens/VerifyOtp";
 import { useNavigate } from "react-router-dom";
 
 function Settings() {
-  const API = import.meta.env.API;
+  const API = import.meta.env.VITE_API;
   const navigate = useNavigate();
   const { user, setIsLoggedIn } = useContext(AppContext);
 

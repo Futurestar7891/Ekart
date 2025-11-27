@@ -23,7 +23,7 @@ const Settings = lazy(() => import("./Screen/ProtectedScreens/Settings"));
 import { fetchProducts, fetchFilters } from "./Utils/Products";
 
 function App() {
-  const API = import.meta.env.API;
+  const API = import.meta.env.VITE_API;
   const {
     isLoggedIn,
     setIsLoggedIn,

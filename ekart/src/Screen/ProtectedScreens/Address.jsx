@@ -5,7 +5,7 @@ import "react-phone-number-input/style.css";
 import { AppContext } from "../../Context/appContext";
 
 function Address() {
-  const API = import.meta.env.API;
+  const API = import.meta.env.VITE_API;
   const { user, setUser } = useContext(AppContext);
 
   const [selectedAddressId, setSelectedAddressId] = useState(

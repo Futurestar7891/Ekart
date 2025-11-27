@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { LogOut, Settings, ShoppingBag } from "lucide-react";
 
 function Profile({ user, setUser, setIsLoggedIn, setShowProfile }) {
-  const API = import.meta.env.API;
+  const API = import.meta.env.VITE_API;
   const onLogout = async () => {
     try {
       const res = await fetch(`${API}/auth/logout`, {

@@ -7,7 +7,7 @@ import VerifyOtp from "./VerifyOtp";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function SignIn() {
-  const API = import.meta.env.API;
+  const API = import.meta.env.VITE_API;
   const navigate = useNavigate();
   const { setIsLoggedIn, setUser } = useContext(AppContext);
 

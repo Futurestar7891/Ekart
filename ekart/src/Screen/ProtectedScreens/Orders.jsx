@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { AppContext } from "../../Context/appContext";
 
 function Orders() {
-  const API = import.meta.env.API;
+  const API = import.meta.env.VITE_API;
   const { orders, setOrders, isLoggedIn } = useContext(AppContext);
 
   useEffect(() => {

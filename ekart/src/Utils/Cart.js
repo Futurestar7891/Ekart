@@ -1,4 +1,4 @@
-const API = import.meta.env.API;
+const API = import.meta.env.VITE_API;
 const BASE_URL = `${API}/cart`;
 
 // GET CART
