@@ -10,6 +10,7 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const Signup = () => {
+  const API = import.meta.env.API;
   const navigate = useNavigate();
   const { setIsLoggedIn, setUser } = useContext(AppContext);
 
@@ -85,20 +86,17 @@ const Signup = () => {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        "http://localhost:3000/api/auth/register/send-otp",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            confirmPassword: formData.confirmpassword,
-          }),
-        }
-      );
+      const res = await fetch(`${API}/auth/register/send-otp`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmpassword,
+        }),
+      });
 
       const data = await res.json();
 
@@ -111,7 +109,7 @@ const Signup = () => {
       // OTP sent — open popup
       setShowOtpPopup(true);
     } catch (err) {
-      setErrors({ general: "Network error",err });
+      setErrors({ general: "Network error", err });
     } finally {
       setLoading(false);
     }
@@ -122,18 +120,15 @@ const Signup = () => {
     try {
       setOtpError("");
 
-      const res = await fetch(
-        "http://localhost:3000/api/auth/register/verify-otp",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: formData.email,
-            otp: finalOtp,
-          }),
-        }
-      );
+      const res = await fetch(`${API}/auth/register/verify-otp`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          otp: finalOtp,
+        }),
+      });
 
       const data = await res.json();
 
@@ -149,7 +144,7 @@ const Signup = () => {
       setShowOtpPopup(false);
       navigate("/", { replace: true });
     } catch (err) {
-      setOtpError("Network error. Try again.",err);
+      setOtpError("Network error. Try again.", err);
     }
   };
 
@@ -158,20 +153,17 @@ const Signup = () => {
     try {
       setOtpError("");
 
-      const res = await fetch(
-        "http://localhost:3000/api/auth/register/send-otp",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            confirmPassword: formData.confirmpassword,
-          }),
-        }
-      );
+      const res = await fetch(`${API}/auth/register/send-otp`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmpassword,
+        }),
+      });
 
       const data = await res.json();
 
@@ -179,134 +171,135 @@ const Signup = () => {
         setOtpError(data.message || "Failed to resend OTP");
       }
     } catch (err) {
-      setOtpError("Network error while resending OTP",err);
+      setOtpError("Network error while resending OTP", err);
     }
   };
 
   return (
-  <div style={styles.page}>
-    <div style={styles.container}>
-      <div style={styles.grid}>
-
-        {/* LEFT IMAGE */}
-        <div style={styles.imageWrapper}>
-          <img src={Loginsignup} alt="signup" style={styles.image} />
-        </div>
-
-        {/* RIGHT FORM CARD */}
-        <div style={styles.card}>
-          <h2 style={styles.title}>Create an Account</h2>
-          <p style={styles.subtitle}>Join us and start your journey today.</p>
-
-          {errors.general && <p style={styles.errorGeneral}>{errors.general}</p>}
-
-          {/* NAME */}
-          <div style={styles.field}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              style={styles.input}
-            />
-            {errors.name && <p style={styles.error}>{errors.name}</p>}
+    <div style={styles.page}>
+      <div style={styles.container}>
+        <div style={styles.grid}>
+          {/* LEFT IMAGE */}
+          <div style={styles.imageWrapper}>
+            <img src={Loginsignup} alt="signup" style={styles.image} />
           </div>
 
-          {/* EMAIL */}
-          <div style={styles.field}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              style={styles.input}
-            />
-            {errors.email && <p style={styles.error}>{errors.email}</p>}
-          </div>
+          {/* RIGHT FORM CARD */}
+          <div style={styles.card}>
+            <h2 style={styles.title}>Create an Account</h2>
+            <p style={styles.subtitle}>Join us and start your journey today.</p>
 
-          {/* PASSWORD */}
-          <div style={styles.field}>
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              style={styles.input}
-            />
-            {errors.password && <p style={styles.error}>{errors.password}</p>}
-          </div>
-
-          {/* CONFIRM PASSWORD */}
-          <div style={styles.field}>
-            <input
-              type="password"
-              name="confirmpassword"
-              placeholder="Confirm Password"
-              value={formData.confirmpassword}
-              onChange={handleChange}
-              style={styles.input}
-            />
-            {errors.confirmpassword && (
-              <p style={styles.error}>{errors.confirmpassword}</p>
+            {errors.general && (
+              <p style={styles.errorGeneral}>{errors.general}</p>
             )}
-          </div>
 
-          {/* TERMS */}
-          <div style={styles.checkboxRow}>
-            <input
-              type="checkbox"
-              checked={accepted}
-              onChange={() => setAccepted(!accepted)}
-              style={styles.checkbox}
-            />
-            <p style={styles.terms}>
-              By signing up, you agree to our <strong>Terms</strong> and{" "}
-              <strong>Privacy Policy</strong>.
+            {/* NAME */}
+            <div style={styles.field}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                style={styles.input}
+              />
+              {errors.name && <p style={styles.error}>{errors.name}</p>}
+            </div>
+
+            {/* EMAIL */}
+            <div style={styles.field}>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                style={styles.input}
+              />
+              {errors.email && <p style={styles.error}>{errors.email}</p>}
+            </div>
+
+            {/* PASSWORD */}
+            <div style={styles.field}>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                style={styles.input}
+              />
+              {errors.password && <p style={styles.error}>{errors.password}</p>}
+            </div>
+
+            {/* CONFIRM PASSWORD */}
+            <div style={styles.field}>
+              <input
+                type="password"
+                name="confirmpassword"
+                placeholder="Confirm Password"
+                value={formData.confirmpassword}
+                onChange={handleChange}
+                style={styles.input}
+              />
+              {errors.confirmpassword && (
+                <p style={styles.error}>{errors.confirmpassword}</p>
+              )}
+            </div>
+
+            {/* TERMS */}
+            <div style={styles.checkboxRow}>
+              <input
+                type="checkbox"
+                checked={accepted}
+                onChange={() => setAccepted(!accepted)}
+                style={styles.checkbox}
+              />
+              <p style={styles.terms}>
+                By signing up, you agree to our <strong>Terms</strong> and{" "}
+                <strong>Privacy Policy</strong>.
+              </p>
+            </div>
+
+            {errors.policy && <p style={styles.error}>{errors.policy}</p>}
+
+            {/* SIGNUP BUTTON */}
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              style={{
+                ...styles.button,
+                background: accepted ? "#2563eb" : "#9bbdf7",
+                cursor: accepted ? "pointer" : "not-allowed",
+              }}
+            >
+              {loading ? "Please wait..." : "Sign Up"}
+            </button>
+
+            {/* LOGIN LINK */}
+            <p style={styles.bottomText}>
+              Already have an account?
+              <NavLink to="/signin" style={styles.link}>
+                {" "}
+                Sign In
+              </NavLink>
             </p>
           </div>
-
-          {errors.policy && <p style={styles.error}>{errors.policy}</p>}
-
-          {/* SIGNUP BUTTON */}
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            style={{
-              ...styles.button,
-              background: accepted ? "#2563eb" : "#9bbdf7",
-              cursor: accepted ? "pointer" : "not-allowed",
-            }}
-          >
-            {loading ? "Please wait..." : "Sign Up"}
-          </button>
-
-          {/* LOGIN LINK */}
-          <p style={styles.bottomText}>
-            Already have an account?
-            <NavLink to="/signin" style={styles.link}>
-              {" "}
-              Sign In
-            </NavLink>
-          </p>
         </div>
       </div>
-    </div>
 
-    {/* OTP POPUP */}
-    {showOtpPopup && (
-      <VerifyOtp
-        onClose={() => setShowOtpPopup(false)}
-        onVerify={handleVerifyOtp}
-        onResend={handleResendOtp}
-        error={otpError}
-      />
-    )}
-  </div>
-);
-}
+      {/* OTP POPUP */}
+      {showOtpPopup && (
+        <VerifyOtp
+          onClose={() => setShowOtpPopup(false)}
+          onVerify={handleVerifyOtp}
+          onResend={handleResendOtp}
+          error={otpError}
+        />
+      )}
+    </div>
+  );
+};
 
 export default Signup;
 

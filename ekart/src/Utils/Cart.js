@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:3000/api/cart";
+const API = import.meta.env.API;
+const BASE_URL = `${API}/cart`;
 
 // GET CART
 export const fetchCart = async () => {

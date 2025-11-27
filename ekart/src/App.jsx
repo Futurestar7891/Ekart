@@ -1,7 +1,6 @@
 import { useEffect, useContext, lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AppContext } from "./Context/appContext";
-
 // import Shimmer from "./Shimmer";
 import ProtectedRoutes from "./routes/protectedRoutes";
 
@@ -24,6 +23,7 @@ const Settings = lazy(() => import("./Screen/ProtectedScreens/Settings"));
 import { fetchProducts, fetchFilters } from "./Utils/Products";
 
 function App() {
+  const API = import.meta.env.API;
   const {
     isLoggedIn,
     setIsLoggedIn,
@@ -39,7 +39,7 @@ function App() {
   useEffect(() => {
     async function verify() {
       try {
-        const res = await fetch("http://localhost:3000/api/auth/check", {
+        const res = await fetch(`${API}/auth/check`, {
           method: "GET",
           credentials: "include",
         });

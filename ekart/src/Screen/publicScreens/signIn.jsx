@@ -7,6 +7,7 @@ import VerifyOtp from "./VerifyOtp";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function SignIn() {
+  const API = import.meta.env.API;
   const navigate = useNavigate();
   const { setIsLoggedIn, setUser } = useContext(AppContext);
 
@@ -26,7 +27,6 @@ function SignIn() {
     }));
   };
 
-
   const validateLogin = () => {
     const newErrors = {};
 
@@ -43,7 +43,6 @@ function SignIn() {
     return newErrors;
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -57,7 +56,7 @@ function SignIn() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:3000/api/auth/login", {
+      const res = await fetch(`${API}/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -98,14 +97,11 @@ function SignIn() {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        "http://localhost:3000/api/auth/forgot/send-otp",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: formData.email }),
-        }
-      );
+      const res = await fetch(`${API}/auth/forgot/send-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email }),
+      });
 
       const data = await res.json();
 
@@ -127,14 +123,11 @@ function SignIn() {
     setOtpError("");
 
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/auth/forgot/verify-otp",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: formData.email, otp }),
-        }
-      );
+      const res = await fetch(`${API}/auth/forgot/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email, otp }),
+      });
 
       const data = await res.json();
 
@@ -149,7 +142,6 @@ function SignIn() {
     }
   };
 
-  
   const resendOtp = () => {
     handleForgot();
   };
@@ -160,11 +152,7 @@ function SignIn() {
         <div style={styles.grid}>
           {/* LEFT IMAGE */}
           <div style={styles.imageWrapper}>
-            <img
-              src={Loginsignup}
-              alt="login"
-              style={styles.image}
-            />
+            <img src={Loginsignup} alt="login" style={styles.image} />
           </div>
 
           {/* RIGHT FORM */}
@@ -246,7 +234,6 @@ function SignIn() {
 
 export default SignIn;
 
-
 const styles = {
   page: {
     minHeight: "100vh",
@@ -323,8 +310,8 @@ const styles = {
     border: "1px solid #d1d5db",
     background: "#f9fafb",
     fontSize: "14px",
-    backgroundColor:"white",
-    color:"black"
+    backgroundColor: "white",
+    color: "black",
   },
 
   error: {

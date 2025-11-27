@@ -1,7 +1,7 @@
-
+const API = import.meta.env.API;
 export const fetchProducts = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/products", {
+    const res = await fetch(`${API}/products`, {
       method: "GET",
     });
 
@@ -14,10 +14,9 @@ export const fetchProducts = async () => {
   }
 };
 
-
 export const fetchFilters = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/products/filters", {
+    const res = await fetch(`${API}/products/filters`, {
       method: "GET",
     });
 
@@ -31,17 +30,14 @@ export const fetchFilters = async () => {
 };
 export const addReview = async (productId, rating, comment, image) => {
   try {
-    const res = await fetch(
-      `http://localhost:3000/api/products/${productId}/review`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ rating, comment, image }),
-      }
-    );
+    const res = await fetch(`${API}/products/${productId}/review`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ rating, comment, image }),
+    });
 
     const data = await res.json();
 
@@ -53,4 +49,3 @@ export const addReview = async (productId, rating, comment, image) => {
     return null;
   }
 };
-

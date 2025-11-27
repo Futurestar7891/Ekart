@@ -5,6 +5,7 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 function ResetPassword() {
+    const API = import.meta.env.API;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,18 +63,15 @@ function ResetPassword() {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        "http://localhost:3000/api/auth/forgot/reset-password",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            newPassword: formData.newPassword,
-            confirmPassword: formData.confirmPassword,
-          }),
-        }
-      );
+      const res = await fetch(`${API}/auth/forgot/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          newPassword: formData.newPassword,
+          confirmPassword: formData.confirmPassword,
+        }),
+      });
 
       const data = await res.json();
 
@@ -85,7 +83,7 @@ function ResetPassword() {
       alert("Password reset successful! Login again.");
       navigate("/signin");
     } catch (err) {
-      setErrors({ general: "Network error",err });
+      setErrors({ general: "Network error", err });
     } finally {
       setLoading(false);
     }
@@ -94,83 +92,85 @@ function ResetPassword() {
   /* ------------------------ SHOW/HIDE PASSWORD ------------------------ */
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-return (
-  <div style={styles.page}>
-    <div style={styles.container}>
-      <div style={styles.grid}>
-        {/* LEFT IMAGE */}
-        <div style={styles.imageWrapper}>
-          <img src={Loginsignup} alt="reset" style={styles.image} />
-        </div>
+  return (
+    <div style={styles.page}>
+      <div style={styles.container}>
+        <div style={styles.grid}>
+          {/* LEFT IMAGE */}
+          <div style={styles.imageWrapper}>
+            <img src={Loginsignup} alt="reset" style={styles.image} />
+          </div>
 
-        {/* RIGHT FORM */}
-        <div style={styles.card}>
-          <h2 style={styles.title}>Reset Password</h2>
-          <p style={styles.subtitle}>
-            Create a new password for <b>{email}</b>
-          </p>
+          {/* RIGHT FORM */}
+          <div style={styles.card}>
+            <h2 style={styles.title}>Reset Password</h2>
+            <p style={styles.subtitle}>
+              Create a new password for <b>{email}</b>
+            </p>
 
-          {errors.general && (
-            <p style={styles.errorGeneral}>{errors.general}</p>
-          )}
+            {errors.general && (
+              <p style={styles.errorGeneral}>{errors.general}</p>
+            )}
 
-          <form onSubmit={handleSubmit} style={styles.form}>
-            {/* NEW PASSWORD */}
-            <div style={styles.field}>
-              <label style={styles.label}>New Password</label>
-              <div style={styles.inputWrapper}>
-                <input
-                  type={showPass ? "text" : "password"}
-                  name="newPassword"
-                  style={styles.input}
-                  placeholder="Enter new password"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                />
-                <span style={styles.eye} onClick={() => setShowPass(!showPass)}>
-                  {showPass ? "🙈" : "👁️"}
-                </span>
+            <form onSubmit={handleSubmit} style={styles.form}>
+              {/* NEW PASSWORD */}
+              <div style={styles.field}>
+                <label style={styles.label}>New Password</label>
+                <div style={styles.inputWrapper}>
+                  <input
+                    type={showPass ? "text" : "password"}
+                    name="newPassword"
+                    style={styles.input}
+                    placeholder="Enter new password"
+                    value={formData.newPassword}
+                    onChange={handleChange}
+                  />
+                  <span
+                    style={styles.eye}
+                    onClick={() => setShowPass(!showPass)}
+                  >
+                    {showPass ? "🙈" : "👁️"}
+                  </span>
+                </div>
+                {errors.newPassword && (
+                  <p style={styles.error}>{errors.newPassword}</p>
+                )}
               </div>
-              {errors.newPassword && (
-                <p style={styles.error}>{errors.newPassword}</p>
-              )}
-            </div>
 
-            {/* CONFIRM PASSWORD */}
-            <div style={styles.field}>
-              <label style={styles.label}>Confirm Password</label>
-              <div style={styles.inputWrapper}>
-                <input
-                  type={showConfirm ? "text" : "password"}
-                  name="confirmPassword"
-                  style={styles.input}
-                  placeholder="Re-enter password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                <span
-                  style={styles.eye}
-                  onClick={() => setShowConfirm(!showConfirm)}
-                >
-                  {showConfirm ? "🙈" : "👁️"}
-                </span>
+              {/* CONFIRM PASSWORD */}
+              <div style={styles.field}>
+                <label style={styles.label}>Confirm Password</label>
+                <div style={styles.inputWrapper}>
+                  <input
+                    type={showConfirm ? "text" : "password"}
+                    name="confirmPassword"
+                    style={styles.input}
+                    placeholder="Re-enter password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <span
+                    style={styles.eye}
+                    onClick={() => setShowConfirm(!showConfirm)}
+                  >
+                    {showConfirm ? "🙈" : "👁️"}
+                  </span>
+                </div>
+                {errors.confirmPassword && (
+                  <p style={styles.error}>{errors.confirmPassword}</p>
+                )}
               </div>
-              {errors.confirmPassword && (
-                <p style={styles.error}>{errors.confirmPassword}</p>
-              )}
-            </div>
 
-            {/* SUBMIT */}
-            <button type="submit" style={styles.button} disabled={loading}>
-              {loading ? "Please wait..." : "Reset Password"}
-            </button>
-          </form>
+              {/* SUBMIT */}
+              <button type="submit" style={styles.button} disabled={loading}>
+                {loading ? "Please wait..." : "Reset Password"}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
-
+  );
 }
 
 export default ResetPassword;

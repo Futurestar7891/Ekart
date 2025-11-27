@@ -1,12 +1,12 @@
 import React from "react";
-import { NavLink, } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { LogOut, Settings, ShoppingBag } from "lucide-react";
 
-function Profile({ user, setUser, setIsLoggedIn,setShowProfile}) {
-
+function Profile({ user, setUser, setIsLoggedIn, setShowProfile }) {
+  const API = import.meta.env.API;
   const onLogout = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth/logout", {
+      const res = await fetch(`${API}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -17,7 +17,6 @@ function Profile({ user, setUser, setIsLoggedIn,setShowProfile}) {
         setUser(null);
         setIsLoggedIn(false);
         setShowProfile(false);
-        
       }
     } catch (err) {
       console.log("Logout error:", err);
@@ -48,7 +47,6 @@ function Profile({ user, setUser, setIsLoggedIn,setShowProfile}) {
       <div
         style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}
       >
-        
         {user?.image ? (
           <img
             src={user.image}

@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { AppContext } from "../../Context/appContext";
 
 function Orders() {
+  const API = import.meta.env.API;
   const { orders, setOrders, isLoggedIn } = useContext(AppContext);
 
   useEffect(() => {
@@ -9,7 +10,7 @@ function Orders() {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/orders/my-orders", {
+        const res = await fetch(`${API}/orders/my-orders`, {
           method: "GET",
           credentials: "include",
         });

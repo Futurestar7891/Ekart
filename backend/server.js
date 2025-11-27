@@ -9,7 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import addressRoutes from "./routes/addressRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-import webhookRoutes from "./routes/webhookRoutes.js"
+import webhookRoutes from "./routes/webhookRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import otpRoutes from "./routes/otpRoutes.js";
 
@@ -23,17 +23,16 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://shopx-neon.vercel.app",
     credentials: true,
   })
 );
 
 app.use(
   "/api",
- 
+
   webhookRoutes
 );
-
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
@@ -115,8 +114,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/stripe", paymentRoutes);
-app.use("/api/orders",orderRoutes);
-app.use("/api/otp",otpRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/otp", otpRoutes);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`)

@@ -5,9 +5,12 @@ import "react-phone-number-input/style.css";
 import { AppContext } from "../../Context/appContext";
 
 function Address() {
-  const { user,setUser } = useContext(AppContext);
+  const API = import.meta.env.API;
+  const { user, setUser } = useContext(AppContext);
 
-  const [selectedAddressId, setSelectedAddressId] = useState(localStorage.getItem(`${user._id}address`));
+  const [selectedAddressId, setSelectedAddressId] = useState(
+    localStorage.getItem(`${user._id}address`)
+  );
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,59 +29,57 @@ function Address() {
     State && stateCode ? City.getCitiesOfState(country, stateCode) : [];
 
   const handleAddAddress = async () => {
-  try {
+    try {
+      // VALIDATION
+      if (!fullName.trim()) return alert("Please enter full name");
+      if (!phone || !isValidPhoneNumber(phone))
+        return alert("Enter valid phone number");
+      if (!pincode.trim() || pincode.length < 5)
+        return alert("Enter valid pincode");
 
-    // VALIDATION
-    if (!fullName.trim()) return alert("Please enter full name");
-    if (!phone || !isValidPhoneNumber(phone)) return alert("Enter valid phone number");
-    if (!pincode.trim() || pincode.length < 5) return alert("Enter valid pincode");
+      if (!stateCode) return alert("Please select state");
+      if (!cityName) return alert("Please select city");
+      if (!houseNo.trim()) return alert("Enter house/flat number");
+      if (!area.trim()) return alert("Enter area/locality");
+      if (!landmark.trim()) return alert("Enter landmark");
 
-    if (!stateCode) return alert("Please select state");
-    if (!cityName) return alert("Please select city");
-    if (!houseNo.trim()) return alert("Enter house/flat number");
-    if (!area.trim()) return alert("Enter area/locality");
-    if (!landmark.trim()) return alert("Enter landmark");
+      const newAddress = {
+        fullName,
+        phone,
+        pincode,
+        state: stateCode,
+        city: cityName,
+        houseNo,
+        area,
+        landmark,
+      };
 
-    const newAddress = {
-      fullName,
-      phone,
-      pincode,
-      state: stateCode,
-      city: cityName,
-      houseNo,
-      area,
-      landmark,
-    };
+      const res = await fetch(`${API}/address/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(newAddress),
+      });
 
-    const res = await fetch("http://localhost:3000/api/address/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(newAddress),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      setUser(data);
-      alert("Address added successfully");
-    } else {
-      alert("Error adding address");
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+        alert("Address added successfully");
+      } else {
+        alert("Error adding address");
+      }
+    } catch (error) {
+      alert("Something went wrong", error);
     }
-  } catch (error) {
-    alert("Something went wrong",error);
-  }
-};
+  };
 
   // DELETE ADDRESS
   const handleDeleteAddress = async (id) => {
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/address/delete/${id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`${API}/address/delete/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
       if (res.ok) {
         const data = await res.json();
@@ -95,84 +96,85 @@ function Address() {
         alert("Error deleting address");
       }
     } catch (error) {
-      alert("Something went wrong",error);
+      alert("Something went wrong", error);
     }
   };
 
-const handleContinue = async () => {
-  if (!selectedAddressId) return alert("Select an address");
+  const handleContinue = async () => {
+    if (!selectedAddressId) return alert("Select an address");
 
-  const selectedAddress = user.addresses.find(
-    (a) => a._id === selectedAddressId
-  );
+    const selectedAddress = user.addresses.find(
+      (a) => a._id === selectedAddressId
+    );
 
-  if (!selectedAddress) return alert("Address not found");
-let cart = [];
+    if (!selectedAddress) return alert("Address not found");
+    let cart = [];
 
-// Priority 1: Buy Now product
-const buyNow = sessionStorage.getItem("buyNowArray");
+    // Priority 1: Buy Now product
+    const buyNow = sessionStorage.getItem("buyNowArray");
 
-// Priority 2: Full cart
-const fullCart = sessionStorage.getItem("cartArray");
+    // Priority 2: Full cart
+    const fullCart = sessionStorage.getItem("cartArray");
 
-try {
-  if (buyNow) {
-    cart = JSON.parse(buyNow);
-  } else if (fullCart) {
-    cart = JSON.parse(fullCart);
-  } else {
-    cart = [];
-  }
-} catch (err) {
-  console.error("Invalid cart JSON", err);
-  alert("Data error. Please try again.");
-  return;
-}
-
-
-  if (cart.length === 0) {
-    return alert("Your cart is empty.");
-  }
-
-  // ⭐ MINIMUM ORDER CHECK (₹50)
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  if (total < 50) {
-    return alert("Minimum order amount is ₹50 to proceed to payment.");
-  }
-
-  // STRIPE CHECKOUT
-  try {
-    const res = await fetch("http://localhost:3000/api/stripe/create-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        cartItems: cart,
-        address: selectedAddress,
-      }),
-    });
-
-    if (!res.ok) {
-      const errData = await res.json();
-      alert(errData.error || "Payment could not be started.");
+    try {
+      if (buyNow) {
+        cart = JSON.parse(buyNow);
+      } else if (fullCart) {
+        cart = JSON.parse(fullCart);
+      } else {
+        cart = [];
+      }
+    } catch (err) {
+      console.error("Invalid cart JSON", err);
+      alert("Data error. Please try again.");
       return;
     }
 
-    const data = await res.json();
-    console.log("Stripe Response:", data);
-
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      alert("Unable to start payment");
+    if (cart.length === 0) {
+      return alert("Your cart is empty.");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Payment error");
-  }
-};
 
+    // ⭐ MINIMUM ORDER CHECK (₹50)
+    const total = cart.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    if (total < 50) {
+      return alert("Minimum order amount is ₹50 to proceed to payment.");
+    }
+
+    // STRIPE CHECKOUT
+    try {
+      const res = await fetch(`${API}/stripe/create-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          cartItems: cart,
+          address: selectedAddress,
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        alert(errData.error || "Payment could not be started.");
+        return;
+      }
+
+      const data = await res.json();
+      console.log("Stripe Response:", data);
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Unable to start payment");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Payment error");
+    }
+  };
 
   return (
     <>
@@ -412,11 +414,10 @@ try {
                     className="radio"
                     name="addr"
                     checked={selectedAddressId === addr._id}
-                    onChange={() =>{
-                         setSelectedAddressId(addr._id);
-                         localStorage.setItem(`${user._id}address`,addr._id);
-                        
-                        }}
+                    onChange={() => {
+                      setSelectedAddressId(addr._id);
+                      localStorage.setItem(`${user._id}address`, addr._id);
+                    }}
                   />
 
                   <div>

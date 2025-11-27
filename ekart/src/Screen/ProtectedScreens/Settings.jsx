@@ -4,6 +4,7 @@ import VerifyOtp from "../publicScreens/VerifyOtp";
 import { useNavigate } from "react-router-dom";
 
 function Settings() {
+  const API = import.meta.env.API;
   const navigate = useNavigate();
   const { user, setIsLoggedIn } = useContext(AppContext);
 
@@ -39,15 +40,12 @@ function Settings() {
       const base64Image = reader.result;
 
       try {
-        const res = await fetch(
-          "http://localhost:3000/api/auth/change-profile",
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ image: base64Image }),
-          }
-        );
+        const res = await fetch(`${API}/auth/change-profile`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ image: base64Image }),
+        });
 
         const data = await res.json();
 
@@ -86,7 +84,7 @@ function Settings() {
     if (!valid) return;
 
     try {
-      const res = await fetch("http://localhost:3000/api/otp/send-otp", {
+      const res = await fetch(`${API}/otp/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -107,7 +105,7 @@ function Settings() {
   // -------- HANDLE OTP VERIFY (STEP 2: VERIFY OTP) --------
   const verifyOtp = async (otp) => {
     try {
-      const res = await fetch("http://localhost:3000/api/otp/verify-otp", {
+      const res = await fetch(`${API}/otp/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -150,18 +148,15 @@ function Settings() {
     if (!valid) return;
 
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/auth/change-password",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            currentPassword: currentPass,
-            newPassword: newPass,
-          }),
-        }
-      );
+      const res = await fetch(`${API}/auth/change-password`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          currentPassword: currentPass,
+          newPassword: newPass,
+        }),
+      });
 
       const data = await res.json();
 
@@ -182,7 +177,7 @@ function Settings() {
     if (!window.confirm("Are you sure? This cannot be undone.")) return;
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/delete-account", {
+      const res = await fetch(`${API}/auth/delete-account`, {
         method: "DELETE",
         credentials: "include",
       });
