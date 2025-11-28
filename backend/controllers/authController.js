@@ -143,8 +143,9 @@ export const verifyRegisterOtp = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-      
+
         maxAge: 5 * 24 * 60 * 60 * 1000,
+        path: "/",
       })
       .status(200)
       .json({ success: true, user });
@@ -194,6 +195,7 @@ export const login = async (req, res) => {
         secure: true,
         sameSite: "none",
         maxAge: 5 * 24 * 60 * 60 * 1000, // 5 days
+        path: "/",
       })
       .status(200)
       .json({ success: true, user });
