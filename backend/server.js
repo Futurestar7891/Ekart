@@ -18,53 +18,25 @@ connectDB();
 
 const app = express();
 
-/* -------------------------------------------------------------------------- */
-/*                                   CORS                                     */
-/* -------------------------------------------------------------------------- */
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://shopx-omega.vercel.app", // your frontend
-];
-
-// BACKEND URL: https://ekart-1-lyec.onrender.com
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-
-      if (
-        allowedOrigins.includes(origin) ||
-        /\.vercel\.app$/.test(origin) // allow preview frontend builds
-      ) {
-        return callback(null, true);
-      }
-
-      console.log("❌ BLOCKED ORIGIN ->", origin);
-      return callback(new Error("CORS not allowed"));
-    },
+    origin: "https://shopx-omega.vercel.app",
     credentials: true,
   })
 );
 
-/* -------------------------------------------------------------------------- */
-/*                                PARSERS                                     */
-/* -------------------------------------------------------------------------- */
 
+/* ------------------------ PARSERS ------------------------ */
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
 app.use(cookieParser());
 
-/* -------------------------------------------------------------------------- */
-/*                                WEBHOOK                                     */
-/* -------------------------------------------------------------------------- */
+/* ------------------------ WEBHOOK (must come BEFORE stripe JSON parsing) ------------------------ */
 app.use("/api", webhookRoutes);
+// ⚠️ This must stay above other routes but after JSON parser
 
-/* -------------------------------------------------------------------------- */
-/*                                 ROUTES                                     */
-/* -------------------------------------------------------------------------- */
-
+/* ------------------------ ROUTES ------------------------ */
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
@@ -73,10 +45,7 @@ app.use("/api/stripe", paymentRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/otp", otpRoutes);
 
-/* -------------------------------------------------------------------------- */
-/*                                SERVER START                                */
-/* -------------------------------------------------------------------------- */
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+/* ------------------------ SERVER ------------------------ */
+app.listen(process.env.PORT, () =>
+  console.log(`Server running on port ${process.env.PORT}`)
+);
