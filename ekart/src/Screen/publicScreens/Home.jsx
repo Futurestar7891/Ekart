@@ -14,11 +14,10 @@ function Home() {
       if (!isLoggedIn) {
         setCartArray([]);
         return;
-      } 
+      }
 
       const items = await fetchCart();
 
-      
       if (Array.isArray(items)) {
         setCartArray(items);
       }
@@ -28,7 +27,7 @@ function Home() {
   }, [isLoggedIn]); // 🔥 Re-run only when login status changes
 
   return (
-    <div style={{width:"100%"}}>
+    <div style={{ width: "100%" }}>
       <Navbar />
       {activeCategory === "All" && <Carausel />}
       {activeCategory !== "All" ? <FilteredProducts /> : <Products />}
