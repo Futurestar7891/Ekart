@@ -28,11 +28,11 @@ function Home() {
   }, [isLoggedIn]); // 🔥 Re-run only when login status changes
 
   return (
-    <>
+    <div style={{width:"100%"}}>
       <Navbar />
       {activeCategory === "All" && <Carausel />}
       {activeCategory !== "All" ? <FilteredProducts /> : <Products />}
-    </>
+    </div>
   );
 }
 
