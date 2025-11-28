@@ -22,36 +22,29 @@ const app = express();
 /*                                   CORS                                     */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Allow:
- *  - Localhost (development)
- *  - Main production domain
- *  - Vercel preview deployments (regex)
- */
-
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://shopx-omega.vercel.app",
-  /\.vercel\.app$/, // ANY Vercel preview deployment
+  "https://shopx-omega.vercel.app", // your frontend
 ];
+
+// BACKEND URL: https://ekart-1-lyec.onrender.com
 
 app.use(
   cors({
-    origin(origin, callback) {
-      if (!origin) return callback(null, true); // allow Postman / server requests
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
 
-      const allowed = allowedOrigins.some((o) =>
-        typeof o === "string" ? o === origin : o.test(origin)
-      );
-
-      if (allowed) {
+      if (
+        allowedOrigins.includes(origin) ||
+        /\.vercel\.app$/.test(origin) // allow preview frontend builds
+      ) {
         return callback(null, true);
-      } else {
-        console.log("❌ BLOCKED ORIGIN:", origin);
-        return callback(new Error("Not allowed by CORS"));
       }
+
+      console.log("❌ BLOCKED ORIGIN ->", origin);
+      return callback(new Error("CORS not allowed"));
     },
-    credentials: true, // IMPORTANT for cookies
+    credentials: true,
   })
 );
 
@@ -66,7 +59,6 @@ app.use(cookieParser());
 /* -------------------------------------------------------------------------- */
 /*                                WEBHOOK                                     */
 /* -------------------------------------------------------------------------- */
-// Stripe webhook must come BEFORE JSON parsing for raw body.
 app.use("/api", webhookRoutes);
 
 /* -------------------------------------------------------------------------- */
@@ -85,8 +77,6 @@ app.use("/api/otp", otpRoutes);
 /*                                SERVER START                                */
 /* -------------------------------------------------------------------------- */
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

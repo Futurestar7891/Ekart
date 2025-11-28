@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import TempUser from "../models/Temp.js";
 import { sendOTP } from "../Email.js";
-
+const isProd = process.env.NODE_ENV === "production";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const passwordRegex =
@@ -141,9 +141,8 @@ export const verifyRegisterOtp = async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
-
+        secure: isProd, // only on production (HTTPS)
+        sameSite: isProd ? "none" : "lax",
         maxAge: 5 * 24 * 60 * 60 * 1000,
         path: "/",
       })
@@ -192,9 +191,9 @@ export const login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 5 * 24 * 60 * 60 * 1000, // 5 days
+        secure: isProd, // only on production (HTTPS)
+        sameSite: isProd ? "none" : "lax",
+        maxAge: 5 * 24 * 60 * 60 * 1000,
         path: "/",
       })
       .status(200)
