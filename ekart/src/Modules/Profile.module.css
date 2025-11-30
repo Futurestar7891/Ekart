@@ -1,0 +1,56 @@
+@reference "tailwindcss";
+
+/* ============================================
+   PROFILE POPUP WRAPPER
+   ============================================ */
+.profileCard {
+ @apply fixed top-[65px] right-0
+         w-[60%]             /* very small devices */
+         sm:w-[40%]
+         md:w-[20%]         /* larger tablets, though hidden anyway */
+         h-auto
+         bg-white shadow-xl
+         p-5 flex flex-col gap-4
+         border-l border-gray-300;
+
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+/* ============================================
+   USER INFO
+   ============================================ */
+.userInfo {
+  @apply flex items-center mb-4;
+}
+
+.userImage {
+  @apply w-[50px] h-[50px] rounded-full object-cover mr-3;
+}
+
+.userLetter {
+  @apply w-[50px] h-[50px] rounded-full mr-3
+         bg-blue-600 text-white 
+         flex items-center justify-center
+         text-[22px] font-bold;
+}
+
+.userName {
+  @apply text-[16px] font-semibold;
+}
+
+/* ============================================
+   MENU ITEMS
+   ============================================ */
+.menuList {
+  @apply flex flex-col gap-3;
+}
+
+.menuItem {
+  @apply flex items-center gap-2 
+         text-gray-800 text-[15px] no-underline cursor-pointer;
+}
+
+.logoutBtn {
+  @apply flex items-center gap-2 
+         text-red-600 text-[15px] cursor-pointer;
+}

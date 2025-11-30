@@ -12,13 +12,15 @@
   "dependencies": {
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.4.0",
+    "@tailwindcss/vite": "^4.1.17",
     "country-state-city": "^3.2.1",
     "lucide-react": "^0.555.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-phone-number-input": "^3.4.14",
-    "react-router-dom": "^7.9.6"
+    "react-router-dom": "^7.9.6",
+    "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

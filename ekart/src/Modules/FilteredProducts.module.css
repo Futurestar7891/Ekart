@@ -1,0 +1,117 @@
+@reference "tailwindcss";
+
+/* ---------------- PAGE WRAPPER ---------------- */
+.wrapper {
+  @apply flex mt-[110px] px-5 gap-0;
+  height: calc(100vh - 110px);
+}
+
+/* ---------------- LEFT DESKTOP SIDEBAR ---------------- */
+.sidebar {
+  @apply hidden md:block
+         bg-gray-100 p-5 rounded-lg shadow-md
+         sticky top-[110px]
+         overflow-y-auto;
+  width: 260px;
+  height: calc(100vh - 120px);
+}
+
+/* ---------------- MOBILE FULL SCREEN SIDEBAR ---------------- */
+.sidebarMobile {
+  @apply fixed top-0 left-0 w-full h-full bg-white
+         p-5 z-[99999] overflow-y-auto md:hidden shadow-xl;
+}
+
+.sidebarHeader {
+  @apply flex justify-between items-center mb-4;
+}
+
+.applyBtn {
+  @apply w-full py-3 bg-blue-600 text-white rounded-lg 
+         text-center mt-5 text-base font-medium;
+}
+
+/* ---------------- FILTER SECTIONS ---------------- */
+.filterTitle {
+  @apply mb-4 text-lg font-semibold;
+}
+
+.filterGroup {
+  @apply mb-6;
+}
+
+.filterLabel {
+  @apply text-sm font-semibold;
+}
+
+.filterOptions {
+  @apply grid grid-cols-2 gap-y-2 mt-2;
+}
+
+/* ---------------- MAIN CONTENT (SCROLLABLE) ---------------- */
+.main {
+  @apply flex-1 ml-0 md:ml-5 mt-[-6px] overflow-y-auto;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 50px;
+}
+
+/* ---------------- MOBILE STICKY CONTROLS ---------------- */
+.mobileTopRow {
+  @apply flex justify-between items-center
+         bg-white py-2 px-2 md:hidden
+         sticky top-0
+         z-[60]
+         border-b border-gray-300;
+}
+
+.showFilterBtn {
+  @apply py-2 px-4 bg-gray-200 rounded-md text-sm;
+}
+
+.sortSelectMobile {
+  @apply py-2 px-3 border border-gray-300 bg-white rounded-md text-sm
+         max-w-[140px] whitespace-nowrap;
+}
+
+/* ---------------- DESKTOP SORT (STICKY) ---------------- */
+.sortWrapper {
+  @apply hidden md:block sticky top-0 bg-white z-[40] pb-2;
+}
+
+.sortSelectDesktop {
+  @apply py-2 px-3 border border-gray-300 rounded-md bg-white
+         max-w-[180px] whitespace-nowrap;
+}
+
+/* ---------------- PRODUCT GRID BASE ---------------- */
+.productGrid {
+  @apply grid gap-8 w-full;
+}
+
+/* ------- 1 CARD: 0–699px ------- */
+@media (max-width: 699px) {
+  .productGrid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+/* ------- 2 CARDS: 700px – 1199px ------- */
+@media (min-width: 700px) and (max-width: 1199px) {
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Sidebar wider for medium screens */
+  .sidebar {
+    width: 300px;
+  }
+}
+
+/* ------- 3 CARDS: 1200px+ ------- */
+@media (min-width: 1200px) {
+  .productGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

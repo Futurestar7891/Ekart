@@ -1,0 +1,88 @@
+@reference "tailwindcss";
+
+/* PAGE WRAPPER */
+.page {
+  @apply min-h-screen flex items-center justify-center bg-gray-100 p-6;
+}
+
+/* MAIN GRID */
+.grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full max-w-[1100px];
+}
+
+/* IMAGE */
+.imageWrapper {
+  @apply flex justify-center order-1 md:order-none;
+}
+
+.image {
+  @apply w-full max-w-[480px] rounded-xl;
+}
+
+/* FORM CARD */
+.card {
+  @apply bg-white p-6 md:p-8 rounded-2xl shadow-lg w-full max-w-[420px] order-2;
+}
+
+/* TITLES */
+.title {
+  @apply text-2xl md:text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-sm md:text-base text-gray-600 mb-4;
+}
+
+/* INPUT FIELDS */
+.field {
+  @apply mb-3 text-left;
+}
+
+.input {
+  @apply w-full px-4 py-3 rounded-xl border border-gray-300 
+         bg-gray-100 outline-none text-sm;
+}
+
+/* CHECKBOX */
+.checkboxRow {
+  @apply flex items-start gap-2 mb-2;
+}
+
+.checkbox {
+  @apply w-4 h-4 mt-1;
+}
+
+.terms {
+  @apply text-sm text-gray-700;
+}
+
+/* BUTTON */
+.button {
+  @apply w-full py-3 rounded-xl text-white text-lg font-semibold;
+}
+
+.buttonDisabled {
+  @apply bg-blue-300 cursor-not-allowed;
+}
+
+.buttonActive {
+  @apply bg-blue-600 hover:bg-blue-700 cursor-pointer;
+}
+
+/* ERRORS */
+.error {
+  @apply text-red-600 text-xs mt-1;
+}
+
+.errorGeneral {
+  @apply p-3 bg-red-100 text-red-700 rounded-lg text-sm mb-2;
+}
+
+/* FOOTER */
+.bottomText {
+  @apply text-center text-sm text-gray-700 mt-4;
+}
+
+.link {
+  @apply text-blue-600 font-semibold ml-1;
+}

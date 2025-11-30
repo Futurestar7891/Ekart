@@ -1,0 +1,53 @@
+@reference "tailwindcss";
+
+/* MAIN CARD */
+.card {
+  @apply flex items-start w-full 
+         bg-white border border-gray-300 rounded-xl 
+         p-3 md:p-4 shadow-sm
+         gap-3 md:gap-4;
+}
+
+/* IMAGE */
+.image {
+  @apply w-[75px] h-[75px] md:w-[95px] md:h-[95px]
+         rounded-lg object-cover flex-shrink-0;
+}
+
+/* LEFT DETAILS (NAME + DESC) */
+.details {
+  @apply flex flex-col flex-1 min-w-[120px];
+}
+
+.name {
+  @apply font-semibold text-sm md:text-lg leading-snug;
+}
+
+.desc {
+  @apply text-gray-600 text-xs md:text-sm mt-1 line-clamp-2;
+}
+
+/* RIGHT COLUMN (PRICE, QTY, TRASH) */
+.rightBox {
+  @apply flex flex-col items-end gap-2
+         min-w-[60px]; /* ensures delete icon ALWAYS fits */
+}
+
+/* PRICE */
+.price {
+  @apply font-bold text-sm md:text-lg;
+}
+
+/* QTY SELECT — NOW SMALLER */
+.select {
+  @apply border border-gray-400 rounded-lg 
+         px-1 py-1 
+         text-xs md:text-base
+         w-[65px] md:w-[90px] 
+         text-center;
+}
+
+/* DELETE ICON */
+.trash {
+  @apply text-red-600 text-base md:text-xl cursor-pointer;
+}

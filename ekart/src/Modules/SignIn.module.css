@@ -1,0 +1,78 @@
+@reference "tailwindcss";
+
+.imageWrapper {
+  @apply flex justify-center order-1 md:order-none;
+}
+
+.grid{
+  @apply bg-white p-6 md:p-8 rounded-2xl shadow-lg 
+         w-full max-w-[420px] 
+         order-2;
+}
+
+/* IMAGE */
+.imageWrapper {
+  @apply flex justify-center order-1 md:order-none;
+}
+
+.image {
+  @apply w-full max-w-[480px] rounded-xl;
+}
+
+/* FORM */
+.card {
+  @apply bg-white p-6 md:p-8 rounded-2xl shadow-lg 
+         w-full max-w-[420px];
+}
+
+/* TEXT */
+.title {
+  @apply text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-gray-600 text-sm mb-4;
+}
+
+/* FIELDS */
+.field {
+  @apply flex flex-col mb-3;
+}
+
+.label {
+  @apply mb-1 text-sm font-medium;
+}
+
+.input {
+  @apply px-4 py-3 rounded-lg border border-gray-300 bg-gray-100 
+         outline-none text-black;
+}
+
+/* FORGOT */
+.forgot {
+  @apply text-blue-600 text-sm underline cursor-pointer text-right mb-2;
+}
+
+/* BUTTON */
+.button {
+  @apply bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg 
+         w-full text-lg font-semibold transition;
+}
+
+/* ERRORS */
+.error {
+  @apply text-red-600 text-xs mt-1;
+}
+
+.errorGeneral {
+  @apply p-3 bg-red-100 text-red-700 rounded-lg text-sm mb-2;
+}
+
+/* BOTTOM TEXT */
+.bottomText {
+  @apply text-center text-sm text-gray-700 mt-4;
+}
+
+.link {
+  @apply text-blue-600 font-semibold ml-1;
+}

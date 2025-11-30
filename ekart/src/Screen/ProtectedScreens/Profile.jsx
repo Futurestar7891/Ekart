@@ -1,9 +1,11 @@
 import React from "react";
+import styles from "../../Modules/Profile.module.css";
 import { NavLink } from "react-router-dom";
 import { LogOut, Settings, ShoppingBag } from "lucide-react";
 
-function Profile({ user, setUser, setIsLoggedIn, setShowProfile }) {
+function Profile({ user, setUser, setIsLoggedIn, setShowProfile,showProfile }) {
   const API = import.meta.env.VITE_API;
+
   const onLogout = async () => {
     try {
       const res = await fetch(`${API}/auth/logout`, {
@@ -23,112 +25,33 @@ function Profile({ user, setUser, setIsLoggedIn, setShowProfile }) {
     }
   };
 
-  // ▼ Generate fallback letter avatar
-  const getLetterAvatar = () => {
-    if (!user?.name) return "U";
-    return user.name.charAt(0).toUpperCase();
-  };
+  const getLetterAvatar = () =>
+    user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "100px",
-        right: "20px",
-        width: "220px",
-        background: "white",
-        borderRadius: "12px",
-        boxShadow: "0px 4px 15px rgba(0,0,0,0.15)",
-        padding: "15px",
-        zIndex: 100,
-      }}
-    >
-      {/* User Info */}
-      <div
-        style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}
-      >
+    <div className={styles.profileCard}>
+      {/* USER INFO */}
+      <div className={styles.userInfo} onClick={()=>setShowProfile(!showProfile)}>
         {user?.image ? (
-          <img
-            src={user.image}
-            alt="user"
-            style={{
-              width: "50px",
-              height: "50px",
-              borderRadius: "50%",
-              objectFit: "cover",
-              marginRight: "10px",
-            }}
-          />
+          <img src={user.image} alt="user" className={styles.userImage} />
         ) : (
-          // If NO image → show letter avatar
-          <div
-            style={{
-              width: "50px",
-              height: "50px",
-              borderRadius: "50%",
-              background: "#4C6EF5",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "white",
-              fontSize: "22px",
-              fontWeight: "700",
-              marginRight: "10px",
-            }}
-          >
-            {getLetterAvatar()}
-          </div>
+          <div className={styles.userLetter}>{getLetterAvatar()}</div>
         )}
 
-        <div>
-          <h4 style={{ margin: 0, fontSize: "16px", fontWeight: "600" }}>
-            {user?.name || "User Name"}
-          </h4>
-        </div>
+        <h4 className={styles.userName}>{user?.name}</h4>
       </div>
 
-      {/* Menu Items */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <NavLink
-          to="/orders"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            textDecoration: "none",
-            color: "#333",
-          }}
-        >
+      {/* MENU ITEMS */}
+      <div className={styles.menuList}>
+        <NavLink to="/orders" className={styles.menuItem}>
           <ShoppingBag size={18} /> Orders
         </NavLink>
 
-        <NavLink
-          to="/settings"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            textDecoration: "none",
-            color: "#333",
-          }}
-        >
+        <NavLink to="/settings" className={styles.menuItem}>
           <Settings size={18} /> Settings
         </NavLink>
 
-        <button
-          onClick={onLogout}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            background: "none",
-            border: "none",
-            padding: 0,
-            color: "red",
-            cursor: "pointer",
-            fontSize: "15px",
-          }}
-        >
+        <button onClick={onLogout} className={styles.logoutBtn}>
           <LogOut size={18} /> Logout
         </button>
       </div>

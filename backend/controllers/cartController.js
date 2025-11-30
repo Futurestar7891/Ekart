@@ -10,8 +10,8 @@ export const getCart = async (req, res) => {
 
 // ADD TO CART
 export const addToCart = async (req, res) => {
-  const { productId, name, image, price } = req.body;
-
+  const { productId, name, image, price,description } = req.body;
+  console.log(req.body);
   let cart = await Cart.findOne({ userId: req.user._id });
 
   if (!cart) {
@@ -27,7 +27,7 @@ export const addToCart = async (req, res) => {
     if (existing) {
       existing.quantity++;
     } else {
-      cart.cartItems.push({ productId, name, image, price, quantity: 1 });
+      cart.cartItems.push({ productId, name, image, price, quantity: 1,description });
     }
   }
 

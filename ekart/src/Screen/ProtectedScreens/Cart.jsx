@@ -2,21 +2,16 @@ import { useContext, useEffect, useState } from "react";
 import CartCard from "../../Components/CartCard";
 import { useNavigate } from "react-router-dom";
 
-
-import {
-  fetchCart,
-  updateQuantity,
-  deleteCartItem,
-  // checkout,
-} from "../../Utils/Cart";
+import { fetchCart, updateQuantity, deleteCartItem } from "../../Utils/Cart";
 import { AppContext } from "../../Context/appContext";
 
+import Styles from "../../Modules/Cart.module.css";
+
 function Cart() {
- const navigate=useNavigate();
- const {cartarray,setCartArray}=useContext(AppContext);
+  const navigate = useNavigate();
+  const { cartarray, setCartArray } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
 
-  // Load Cart
   useEffect(() => {
     async function load() {
       const items = await fetchCart();
@@ -27,54 +22,50 @@ function Cart() {
   }, []);
 
   const handleQuantityChange = async (productId, quantity) => {
-    const items = await updateQuantity(productId, quantity);
-    setCartArray(items);
+    const updated = await updateQuantity(productId, quantity);
+    setCartArray(updated);
   };
 
   const handleDelete = async (productId) => {
-    const items = await deleteCartItem(productId);
-    setCartArray(items);
+    const updated = await deleteCartItem(productId);
+    setCartArray(updated);
   };
 
- const subtotal = Array.isArray(cartarray)
-   ? cartarray.reduce((sum, item) => sum + item.price * item.quantity, 0)
-   : 0;
-
-
-  // CHECKOUT
-  // const handleCheckout = async () => {
-  //   const data = await checkout(cartarray, "vermav12346@gmail.com");
-  //   if (data?.url) window.location.href = data.url;
-  //   else alert("Checkout failed.");
-  // };
+  const subtotal = Array.isArray(cartarray)
+    ? cartarray.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    : 0;
 
   return (
-    <div style={styles.container}>
-      <div style={styles.subtotal}>
+    <div className={Styles.container}>
+      <div className={Styles.subtotal}>
         <h2>Subtotal:</h2>
         <span>₹{subtotal.toFixed(2)}</span>
       </div>
 
-      <div style={styles.items}>
+      <div className={Styles.items}>
         {loading ? (
-          <p>Loading cart items...</p>
+          <p>Loading cart...</p>
         ) : cartarray.length > 0 ? (
           <>
             {cartarray.map((item) => (
-              <div>
-                <CartCard
-                  key={item.id}
-                  item={item}
-                  onQuantityChange={handleQuantityChange}
-                  onDelete={handleDelete}
-                />
-              </div>
+              <CartCard
+                key={item._id}
+                item={item}
+                onQuantityChange={handleQuantityChange}
+                onDelete={handleDelete}
+              />
             ))}
 
-            <button onClick={()=>{
-               sessionStorage.setItem("cartArray", JSON.stringify(cartarray));
-               sessionStorage.removeItem("buyNowArray");
-               navigate("/address")} }style={styles.checkoutBtn}>Proceed to Checkout</button>
+            <button
+              className={Styles.checkoutBtn}
+              onClick={() => {
+                sessionStorage.setItem("cartArray", JSON.stringify(cartarray));
+                sessionStorage.removeItem("buyNowArray");
+                navigate("/address");
+              }}
+            >
+              Proceed to Checkout
+            </button>
           </>
         ) : (
           <p>Your cart is empty.</p>
@@ -85,34 +76,3 @@ function Cart() {
 }
 
 export default Cart;
-
-const styles = {
-  container: {
-    width: "90vw",
-    minHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    margin: "0 auto",
-    padding: "4vh 2vw",
-    justifyContent: "flex-start",
-    boxSizing: "border-box",
-    alignItems: "flex-start",
-  },
-  subtotal: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "space-between",
-    alignItems: "center",
-    fontSize: "1.5vw",
-    fontWeight: "bold",
-    borderBottom: "0.1vw solid #ccc",
-    paddingBottom: "1vh",
-    marginBottom: "2vh",
-  },
-  items: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "2vh",
-    width:"100%"
-  },
-};

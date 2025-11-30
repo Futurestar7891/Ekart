@@ -1,3 +1,4 @@
+import Styles from "../Modules/ProductCard.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/appContext";
 import { useContext, useEffect, useState } from "react";
@@ -7,26 +8,18 @@ function ProductCard({ product }) {
   const navigate = useNavigate();
   const { isLoggedIn, cartarray, setCartArray } = useContext(AppContext);
   const [added, setAdded] = useState(false);
-
-  // Check if already in cart (persists after refresh)
+  console.log("jhfkjdfd",product);
   useEffect(() => {
     if (Array.isArray(cartarray)) {
-      const isAdded = cartarray.some(
-        (item) => item.productId?.toString() === product._id.toString()
-      );
+      const isAdded = cartarray.some((item) => item.productId === product._id);
       setAdded(isAdded);
     }
-  }, [cartarray, product._id, isLoggedIn]);
+  }, [cartarray]);
 
-  /* -------------------- BUY NOW FUNCTION -------------------- */
   const handleBuyNow = (e) => {
     e.preventDefault();
-    e.stopPropagation();
 
-    if (!isLoggedIn) {
-      alert("Please sign in first");
-      return;
-    }
+    if (!isLoggedIn) return alert("Please sign in first");
 
     const singleProduct = [
       {
@@ -39,135 +32,64 @@ function ProductCard({ product }) {
     ];
 
     sessionStorage.setItem("buyNowArray", JSON.stringify(singleProduct));
-
-    // Optional: clear normal cart checkout data
     sessionStorage.removeItem("cartArray");
-
     navigate("/address");
   };
 
-  /* -------------------- ADD TO CART -------------------- */
   const handleAddToCart = async (e) => {
     e.preventDefault();
-    e.stopPropagation();
 
-    if (!isLoggedIn) {
-      alert("Please sign in first");
-      return;
-    }
+    if (!isLoggedIn) return alert("Please sign in first");
 
     const body = {
       productId: product._id,
       name: product.name,
       price: product.price,
       image: product.images?.[0]?.url,
+      description:product.description.split(" ").slice(0,20).join(" ") + "....."
     };
 
     try {
       const res = await addToCart(body);
-
-      if (!res || !Array.isArray(res)) {
-        alert("Failed to add item");
-        return;
-      }
+      if (!Array.isArray(res)) return alert("Failed to add item");
 
       setCartArray(res);
       setAdded(true);
       alert("Added to cart!");
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert("Could not add item");
     }
   };
 
-  const styles = {
-    card: {
-      backgroundColor: "#fff",
-      borderRadius: "10px",
-      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-      overflow: "hidden",
-      display: "flex",
-      flexDirection: "column",
-      transition: "transform 0.2s",
-      cursor: "pointer",
-    },
-    image: {
-      width: "100%",
-      height: "200px",
-      objectFit: "cover",
-    },
-    content: {
-      padding: "15px",
-      flex: "1",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-    },
-    button: {
-      flex: 1,
-      padding: "10px",
-      border: "none",
-      borderRadius: "5px",
-      cursor: "pointer",
-      fontWeight: "bold",
-      transition: "0.2s ease",
-    },
-    addDefault: {
-      backgroundColor: "#000",
-      color: "#fff",
-    },
-    addedDisabled: {
-      backgroundColor: "#ccc",
-      color: "#555",
-      cursor: "not-allowed",
-      opacity: 0.6,
-    },
-    buyNow: {
-      backgroundColor: "#ff4d4d",
-      color: "#fff",
-    },
-  };
-
   return (
-    <NavLink
-      to={`/product/detail/${product._id}`}
-      style={styles.card}
-      onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-      onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-    >
+    <NavLink to={`/product/detail/${product._id}`} className={Styles.card}>
       <img
-        src={product.images?.[0]?.url || "https://via.placeholder.com/300"}
+        src={product.images?.[0]?.url}
         alt={product.name}
-        style={styles.image}
+        className={Styles.image}
       />
 
-      <div style={styles.content}>
-        <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>{product.name}</h2>
+      <div className={Styles.content}>
+        <h2 className={Styles.title}>{product.name}</h2>
 
-        <p style={{ fontSize: "14px", color: "#555" }}>{product.description}</p>
+        <p className={Styles.description}>{product.description}</p>
 
-        <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-          ₹ {product.price}
-        </div>
+        <div className={Styles.price}>₹ {product.price}</div>
 
-        {/* BUTTONS */}
-        <div style={{ display: "flex", gap: "10px" }}>
-          {/* ADD TO CART */}
+        <div className={Styles.btnRow}>
           <button
             onClick={handleAddToCart}
             disabled={added}
-            style={{
-              ...styles.button,
-              ...(added ? styles.addedDisabled : styles.addDefault),
-            }}
+            className={`${Styles.btn} ${
+              added ? Styles.addedDisabled : Styles.addDefault
+            }`}
           >
-            {added ? "Added ✓" : "Add To Cart"}
+            {added ? "Added ✓" : "+ Cart"}
           </button>
 
-          {/* BUY NOW */}
           <button
-            style={{ ...styles.button, ...styles.buyNow }}
             onClick={handleBuyNow}
+            className={`${Styles.btn} ${Styles.buyNow}`}
           >
             Buy Now
           </button>

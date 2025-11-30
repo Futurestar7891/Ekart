@@ -4,6 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/appContext";
 import VerifyOtp from "./VerifyOtp";
 
+import Styles from "../../Modules/SignIn.module.css";
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function SignIn() {
@@ -18,8 +20,10 @@ function SignIn() {
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [otpError, setOtpError] = useState("");
 
+  /* --------------------  HANDLE INPUT  -------------------- */
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
     setErrors((prev) => ({
       ...prev,
       [e.target.name]: "",
@@ -27,22 +31,20 @@ function SignIn() {
     }));
   };
 
+  /* --------------------  VALIDATION  -------------------- */
   const validateLogin = () => {
     const newErrors = {};
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email.trim())) {
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!emailRegex.test(formData.email.trim()))
       newErrors.email = "Invalid email format";
-    }
 
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    }
+    if (!formData.password.trim()) newErrors.password = "Password is required";
 
     return newErrors;
   };
 
+  /* --------------------  SUBMIT LOGIN  -------------------- */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -66,13 +68,13 @@ function SignIn() {
       const data = await res.json();
 
       if (!data.success) {
-        if (data.errors) setErrors(data.errors);
-        else setErrors({ general: data.message || "Invalid credentials" });
+        setErrors({ general: data.message || "Invalid credentials" });
         return;
       }
 
       setUser(data.user);
       setIsLoggedIn(true);
+
       navigate("/", { replace: true });
     } catch (err) {
       setErrors({ general: "Network error" });
@@ -81,18 +83,15 @@ function SignIn() {
     }
   };
 
+  /* --------------------  FORGOT PASSWORD - SEND OTP  -------------------- */
   const handleForgot = async () => {
     setErrors({});
 
-    if (!formData.email.trim()) {
-      setErrors({ email: "Email is required" });
-      return;
-    }
+    if (!formData.email.trim())
+      return setErrors({ email: "Email is required" });
 
-    if (!emailRegex.test(formData.email.trim())) {
-      setErrors({ email: "Invalid email format" });
-      return;
-    }
+    if (!emailRegex.test(formData.email.trim()))
+      return setErrors({ email: "Invalid email format" });
 
     try {
       setLoading(true);
@@ -118,7 +117,7 @@ function SignIn() {
     }
   };
 
-  /* ---------------------- VERIFY OTP ---------------------- */
+  /* --------------------  VERIFY OTP  -------------------- */
   const verifyForgotOtp = async (otp) => {
     setOtpError("");
 
@@ -126,7 +125,10 @@ function SignIn() {
       const res = await fetch(`${API}/auth/forgot/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formData.email, otp }),
+        body: JSON.stringify({
+          email: formData.email,
+          otp,
+        }),
       });
 
       const data = await res.json();
@@ -142,80 +144,76 @@ function SignIn() {
     }
   };
 
-  const resendOtp = () => {
-    handleForgot();
-  };
+  const resendOtp = () => handleForgot();
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <div style={styles.grid}>
-          {/* LEFT IMAGE */}
-          <div style={styles.imageWrapper}>
-            <img src={Loginsignup} alt="login" style={styles.image} />
-          </div>
+    <div className={Styles.page}>
+      <div className={Styles.grid}>
+        {/* ----------------- IMAGE ----------------- */}
+        <div className={Styles.imageWrapper}>
+          <img src={Loginsignup} alt="login" className={Styles.image} />
+        </div>
 
-          {/* RIGHT FORM */}
-          <div style={styles.card}>
-            <form onSubmit={handleSubmit} style={styles.form}>
-              <h1 style={styles.title}>Sign in</h1>
-              <p style={styles.subtitle}>
-                Login and explore your favourite products.
-              </p>
+        {/* ----------------- FORM ----------------- */}
+        <div className={Styles.card}>
+          <form onSubmit={handleSubmit}>
+            <h1 className={Styles.title}>Sign in</h1>
+            <p className={Styles.subtitle}>
+              Login and explore your favourite products.
+            </p>
 
-              {errors.general && (
-                <p style={styles.errorGeneral}>{errors.general}</p>
+            {errors.general && (
+              <p className={Styles.errorGeneral}>{errors.general}</p>
+            )}
+
+            {/* EMAIL */}
+            <div className={Styles.field}>
+              <label className={Styles.label}>Email</label>
+              <input
+                type="email"
+                name="email"
+                className={Styles.input}
+                placeholder="Enter email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              {errors.email && <p className={Styles.error}>{errors.email}</p>}
+            </div>
+
+            {/* PASSWORD */}
+            <div className={Styles.field}>
+              <label className={Styles.label}>Password</label>
+              <input
+                type="password"
+                name="password"
+                className={Styles.input}
+                placeholder="Enter password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              {errors.password && (
+                <p className={Styles.error}>{errors.password}</p>
               )}
+            </div>
 
-              {/* EMAIL */}
-              <div style={styles.field}>
-                <label style={styles.label}>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  style={styles.input}
-                  placeholder="Enter email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && <p style={styles.error}>{errors.email}</p>}
-              </div>
+            {/* FORGOT PASSWORD */}
+            <p className={Styles.forgot} onClick={handleForgot}>
+              Forgot password?
+            </p>
 
-              {/* PASSWORD */}
-              <div style={styles.field}>
-                <label style={styles.label}>Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  style={styles.input}
-                  placeholder="Enter password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <p style={styles.error}>{errors.password}</p>
-                )}
-              </div>
+            {/* BUTTON */}
+            <button type="submit" className={Styles.button} disabled={loading}>
+              {loading ? "Please wait..." : "Sign In"}
+            </button>
 
-              {/* FORGOT PASSWORD LINK */}
-              <p onClick={handleForgot} style={styles.forgotLink}>
-                Forgot password?
-              </p>
-
-              {/* LOGIN BUTTON */}
-              <button type="submit" style={styles.button} disabled={loading}>
-                {loading ? "Please wait..." : "Sign In"}
-              </button>
-
-              <p style={styles.bottomText}>
-                Don't have an account?
-                <NavLink to="/signup" style={styles.link}>
-                  {" "}
-                  Register here
-                </NavLink>
-              </p>
-            </form>
-          </div>
+            {/* SIGNUP LINK */}
+            <p className={Styles.bottomText}>
+              Don’t have an account?
+              <NavLink to="/signup" className={Styles.link}>
+                Register here
+              </NavLink>
+            </p>
+          </form>
         </div>
       </div>
 
@@ -233,129 +231,3 @@ function SignIn() {
 }
 
 export default SignIn;
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#f3f4f6",
-    padding: "24px",
-  },
-
-  container: {
-    width: "100%",
-    maxWidth: "1100px",
-  },
-
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "30px",
-    alignItems: "center",
-  },
-
-  /* LEFT IMAGE */
-  imageWrapper: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  image: {
-    width: "100%",
-    maxWidth: "500px",
-    borderRadius: "12px",
-  },
-
-  /* RIGHT FORM */
-  card: {
-    background: "#fff",
-    padding: "32px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-  },
-
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-  },
-
-  title: {
-    fontSize: "30px",
-    fontWeight: "700",
-    marginBottom: "4px",
-  },
-
-  subtitle: {
-    fontSize: "15px",
-    color: "#6b7280",
-    marginBottom: "10px",
-  },
-
-  field: {
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  label: {
-    marginBottom: "6px",
-    fontSize: "14px",
-    fontWeight: "500",
-  },
-
-  input: {
-    padding: "12px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-    background: "#f9fafb",
-    fontSize: "14px",
-    backgroundColor: "white",
-    color: "black",
-  },
-
-  error: {
-    color: "red",
-    fontSize: "12px",
-    marginTop: "4px",
-  },
-
-  errorGeneral: {
-    background: "#fee2e2",
-    padding: "8px",
-    borderRadius: "6px",
-    textAlign: "center",
-    color: "#b91c1c",
-  },
-
-  forgotLink: {
-    fontSize: "14px",
-    color: "#2563eb",
-    cursor: "pointer",
-    textDecoration: "underline",
-    marginTop: "-10px",
-    alignSelf: "flex-end",
-  },
-
-  button: {
-    background: "#2563eb",
-    color: "white",
-    padding: "12px",
-    borderRadius: "8px",
-    border: "none",
-    fontSize: "16px",
-    cursor: "pointer",
-    marginTop: "10px",
-  },
-
-  bottomText: {
-    textAlign: "center",
-    fontSize: "14px",
-    marginTop: "12px",
-  },
-
-  link: {
-    color: "#2563eb",
-    marginLeft: "4px",
-  },
-};

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loginsignup from "../../assets/Loginsignup.webp";
+import Styles from "../../Modules/ResetPassword.module.css";
+
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -19,6 +21,9 @@ function ResetPassword() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -29,7 +34,6 @@ function ResetPassword() {
     }));
   };
 
-  /* ------------------------ FRONTEND VALIDATION ------------------------ */
   const validateForm = () => {
     const newErrors = {};
 
@@ -37,7 +41,7 @@ function ResetPassword() {
       newErrors.newPassword = "New password is required";
     } else if (!passwordRegex.test(formData.newPassword)) {
       newErrors.newPassword =
-        "Password must be 8+ chars incl. uppercase, lowercase, number & special char";
+        "Password must contain uppercase, lowercase, number & special char";
     }
 
     if (!formData.confirmPassword.trim()) {
@@ -49,7 +53,6 @@ function ResetPassword() {
     return newErrors;
   };
 
-  /* ------------------------ HANDLE SUBMIT ------------------------ */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -83,90 +86,84 @@ function ResetPassword() {
       alert("Password reset successful! Login again.");
       navigate("/signin");
     } catch (err) {
-      setErrors({ general: "Network error", err });
+      setErrors({ general: "Network error" });
     } finally {
       setLoading(false);
     }
   };
 
-  /* ------------------------ SHOW/HIDE PASSWORD ------------------------ */
-  const [showPass, setShowPass] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <div style={styles.grid}>
-          {/* LEFT IMAGE */}
-          <div style={styles.imageWrapper}>
-            <img src={Loginsignup} alt="reset" style={styles.image} />
-          </div>
+    <div className={Styles.page}>
+      <div className={Styles.grid}>
+        {/* IMAGE */}
+        <div className={Styles.imageWrapper}>
+          <img src={Loginsignup} alt="reset" className={Styles.image} />
+        </div>
 
-          {/* RIGHT FORM */}
-          <div style={styles.card}>
-            <h2 style={styles.title}>Reset Password</h2>
-            <p style={styles.subtitle}>
-              Create a new password for <b>{email}</b>
-            </p>
+        {/* FORM */}
+        <div className={Styles.card}>
+          <h2 className={Styles.title}>Reset Password</h2>
+          <p className={Styles.subtitle}>
+            Create a new password for <b>{email}</b>
+          </p>
 
-            {errors.general && (
-              <p style={styles.errorGeneral}>{errors.general}</p>
-            )}
+          {errors.general && (
+            <p className={Styles.errorGeneral}>{errors.general}</p>
+          )}
 
-            <form onSubmit={handleSubmit} style={styles.form}>
-              {/* NEW PASSWORD */}
-              <div style={styles.field}>
-                <label style={styles.label}>New Password</label>
-                <div style={styles.inputWrapper}>
-                  <input
-                    type={showPass ? "text" : "password"}
-                    name="newPassword"
-                    style={styles.input}
-                    placeholder="Enter new password"
-                    value={formData.newPassword}
-                    onChange={handleChange}
-                  />
-                  <span
-                    style={styles.eye}
-                    onClick={() => setShowPass(!showPass)}
-                  >
-                    {showPass ? "🙈" : "👁️"}
-                  </span>
-                </div>
-                {errors.newPassword && (
-                  <p style={styles.error}>{errors.newPassword}</p>
-                )}
+          <form onSubmit={handleSubmit}>
+            {/* NEW PASSWORD */}
+            <div className={Styles.field}>
+              <label className={Styles.label}>New Password</label>
+              <div className={Styles.inputWrapper}>
+                <input
+                  type={showPass ? "text" : "password"}
+                  name="newPassword"
+                  className={Styles.input}
+                  placeholder="Enter new password"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                />
+                <span
+                  className={Styles.eye}
+                  onClick={() => setShowPass(!showPass)}
+                >
+                  {showPass ? "🙈" : "👁️"}
+                </span>
               </div>
+              {errors.newPassword && (
+                <p className={Styles.error}>{errors.newPassword}</p>
+              )}
+            </div>
 
-              {/* CONFIRM PASSWORD */}
-              <div style={styles.field}>
-                <label style={styles.label}>Confirm Password</label>
-                <div style={styles.inputWrapper}>
-                  <input
-                    type={showConfirm ? "text" : "password"}
-                    name="confirmPassword"
-                    style={styles.input}
-                    placeholder="Re-enter password"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                  />
-                  <span
-                    style={styles.eye}
-                    onClick={() => setShowConfirm(!showConfirm)}
-                  >
-                    {showConfirm ? "🙈" : "👁️"}
-                  </span>
-                </div>
-                {errors.confirmPassword && (
-                  <p style={styles.error}>{errors.confirmPassword}</p>
-                )}
+            {/* CONFIRM PASSWORD */}
+            <div className={Styles.field}>
+              <label className={Styles.label}>Confirm Password</label>
+              <div className={Styles.inputWrapper}>
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  name="confirmPassword"
+                  className={Styles.input}
+                  placeholder="Re-enter password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+                <span
+                  className={Styles.eye}
+                  onClick={() => setShowConfirm(!showConfirm)}
+                >
+                  {showConfirm ? "🙈" : "👁️"}
+                </span>
               </div>
+              {errors.confirmPassword && (
+                <p className={Styles.error}>{errors.confirmPassword}</p>
+              )}
+            </div>
 
-              {/* SUBMIT */}
-              <button type="submit" style={styles.button} disabled={loading}>
-                {loading ? "Please wait..." : "Reset Password"}
-              </button>
-            </form>
-          </div>
+            <button className={Styles.button} type="submit" disabled={loading}>
+              {loading ? "Please wait..." : "Reset Password"}
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -174,129 +171,3 @@ function ResetPassword() {
 }
 
 export default ResetPassword;
-
-/* ------------------------ STYLES ------------------------ */
-
-const styles = {
-  container: {
-    width: "100%",
-    maxWidth: "1100px",
-  },
-
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "30px",
-    alignItems: "center",
-  },
-
-  imageWrapper: {
-    display: "flex",
-    justifyContent: "center",
-  },
-
-  image: {
-    width: "100%",
-    maxWidth: "500px",
-    borderRadius: "12px",
-  },
-
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#f3f4f6",
-    padding: "20px",
-  },
-
-  card: {
-    width: "100%",
-    maxWidth: "450px",
-    background: "#fff",
-    padding: "32px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-  },
-
-  title: {
-    fontSize: "26px",
-    fontWeight: "700",
-    marginBottom: "6px",
-    color: "#0f172a",
-  },
-
-  subtitle: {
-    fontSize: "14px",
-    color: "#475569",
-    marginBottom: "20px",
-  },
-
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-  },
-
-  field: {
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  label: {
-    marginBottom: "6px",
-    fontSize: "14px",
-    fontWeight: "500",
-    color: "#0f172a",
-  },
-
-  inputWrapper: {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-  },
-
-  input: {
-    width: "100%",
-    padding: "12px 40px 12px 12px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-    background: "#f1f5f9",
-    fontSize: "14px",
-    color: "black",
-  },
-
-  eye: {
-    position: "absolute",
-    right: "12px",
-    cursor: "pointer",
-    fontSize: "18px",
-  },
-
-  error: {
-    fontSize: "12px",
-    color: "red",
-    marginTop: "4px",
-  },
-
-  errorGeneral: {
-    background: "#fee2e2",
-    padding: "10px",
-    borderRadius: "8px",
-    color: "#b91c1c",
-    marginBottom: "10px",
-    textAlign: "center",
-  },
-
-  button: {
-    marginTop: "10px",
-    padding: "12px",
-    borderRadius: "8px",
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    fontSize: "16px",
-    cursor: "pointer",
-    fontWeight: "600",
-  },
-};

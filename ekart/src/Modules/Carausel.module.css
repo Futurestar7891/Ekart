@@ -1,0 +1,63 @@
+@reference "tailwindcss";
+
+/* Outer container */
+.container {
+  @apply w-full overflow-hidden mt-26;
+}
+
+
+/* Wrapper that slides */
+.wrapper {
+  @apply flex transition-transform duration-500 ease-in-out border border-blue-300;
+}
+
+/* Each slide — desktop layout ALWAYS */
+.slide {
+  @apply min-w-full 
+         flex flex-row
+         items-center justify-between
+         bg-gray-100
+         px-4 sm:px-8 lg:px-20
+         py-3 sm:py-10 lg:py-14
+         gap-6;
+  /* height is fully dynamic */
+}
+
+/* Text container */
+.textContainer {
+  @apply flex-1 flex flex-col gap-3;
+}
+
+/* Title */
+.title {
+  @apply font-bold
+         text-xl sm:text-2xl md:text-3xl lg:text-4xl;
+}
+
+/* Description */
+.description {
+  @apply text-sm sm:text-base md:text-lg lg:text-xl
+         text-gray-700 leading-relaxed;
+}
+
+/* Button */
+.button {
+  @apply w-fit
+         bg-blue-600 hover:bg-blue-700
+         text-white
+         py-2 px-5
+         rounded-lg
+         text-sm sm:text-base md:text-lg
+         transition;
+}
+
+/* Image — compact mobile, scaled tablet, normal desktop */
+.image {
+  @apply flex-1
+         object-cover rounded-xl
+         max-w-[40%]                   /* always right side */
+         max-h-[40vh]                  /* mobile compact */
+         sm:max-h-[45vh]               /* small tablets */
+         md:max-h-[50vh]               /* big phones/tablets */
+         lg:max-h-[380px];             /* desktop normal size */
+}

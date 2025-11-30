@@ -1,0 +1,10 @@
+@reference "tailwindcss";
+
+.container {
+  @apply max-w-[1200px] mx-auto mt-10 mb-20
+         grid gap-10
+         px-5
+         grid-cols-1           /* mobile */
+         sm:grid-cols-2        /* 640px - 1023px */
+         lg:grid-cols-3;       /* 1024px+ */
+}

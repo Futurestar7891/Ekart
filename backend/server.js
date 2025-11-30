@@ -18,14 +18,13 @@ connectDB();
 
 const app = express();
 
-
 app.use(
   cors({
-    origin: "https://shopx-omega.vercel.app",
+    // origin: "https://shopx-omega.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
-
 
 /* ------------------------ PARSERS ------------------------ */
 app.use(express.json({ limit: "20mb" }));

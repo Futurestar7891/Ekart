@@ -1,0 +1,59 @@
+@reference "tailwindcss";
+
+/* Card wrapper — identical to your inline style */
+.card {
+  @apply bg-white rounded-[10px] shadow-md overflow-hidden
+         flex flex-col cursor-pointer
+         transition-transform duration-200
+         hover:scale-[1.03];
+}
+
+/* Image — identical */
+.image {
+  @apply w-full h-[200px] object-cover;
+}
+
+/* Content wrapper — identical spacing + responsive */
+.content {
+  @apply p-4 flex flex-col justify-between flex-1;
+}
+
+/* Title */
+.title {
+  @apply text-lg font-bold;
+}
+
+/* Description */
+.description {
+  @apply text-sm text-gray-600;
+}
+
+/* Price */
+.price {
+  @apply text-xl font-bold mt-2 mb-4;
+}
+
+/* Buttons container */
+.btnRow {
+  @apply flex gap-3 mt-2;
+}
+
+/* Buttons — matches your style exactly */
+.btn {
+  @apply flex-1 py-2 rounded-md font-bold transition ease-in-out;
+}
+
+/* Add to cart default */
+.addDefault {
+  @apply bg-black text-white hover:bg-gray-900;
+}
+
+/* Added disabled */
+.addedDisabled {
+  @apply bg-gray-300 text-gray-600 cursor-not-allowed opacity-60;
+}
+
+/* Buy Now button */
+.buyNow {
+  @apply bg-red-500 text-white hover:bg-red-600;
+}

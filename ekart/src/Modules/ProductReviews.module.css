@@ -1,0 +1,107 @@
+@reference "tailwindcss";
+
+/* WRAPPER */
+.wrapper {
+  @apply w-full px-3 md:px-8 mt-4 pb-32 relative;
+}
+
+/* HEADING */
+.heading {
+  @apply text-xl md:text-2xl font-bold mb-3;
+}
+
+/* REVIEW LIST */
+.reviewList {
+  @apply flex flex-col gap-3 
+         max-h-[55vh] md:max-h-[60vh] 
+         pr-2 mb-4;
+}
+
+.reviewListScrollable {
+  @apply overflow-y-auto;
+}
+
+.reviewCard {
+  @apply flex gap-3 bg-gray-100 p-2 md:p-3 rounded-lg;
+}
+
+/* AVATARS */
+.avatar,
+.letterAvatar {
+  @apply w-[38px] h-[38px] md:w-[50px] md:h-[50px]
+         rounded-full object-cover flex items-center justify-center 
+         text-white font-bold bg-blue-600;
+}
+
+.letterAvatarSmall,
+.inputAvatar {
+  @apply w-[36px] h-[36px] md:w-[42px] md:h-[42px]
+         rounded-full bg-blue-600 text-white 
+         flex items-center justify-center 
+         text-base md:text-lg font-bold object-cover;
+}
+
+/* REVIEW CONTENT */
+.reviewContent {
+  @apply flex-1;
+}
+
+.reviewImage {
+  @apply w-[100px] md:w-[150px] rounded-lg mt-1;
+}
+
+.noReviews {
+  @apply text-gray-500 italic;
+}
+
+/* INPUT BAR */
+.inputBar {
+  @apply fixed bottom-0 left-0 w-full 
+         flex items-center gap-2 md:gap-3 
+         bg-white px-2 md:px-3 py-2 
+         shadow-[0_-4px_10px_rgba(0,0,0,0.1)]
+         z-[100];
+}
+
+/* RATING — DEFAULT STAR MODE (desktop) */
+.ratingBox {
+  @apply flex items-center 
+         gap-[2px] md:gap-[3px] 
+         text-[18px] md:text-[22px]
+         w-fit hidden md:flex; /* hide on small screens */
+}
+
+.starActive {
+  @apply text-yellow-400 cursor-pointer;
+}
+
+.starInactive {
+  @apply text-gray-300 cursor-pointer;
+}
+
+/* RATING — DROPDOWN (mobile only) */
+.ratingDropdown {
+  @apply block md:hidden text-xs border border-gray-300 rounded-md px-1 py-1;
+  width: 55px; /* SUPER compact */
+}
+
+/* CAMERA UPLOAD */
+.uploadLabel {
+  @apply text-xl md:text-2xl cursor-pointer;
+}
+
+.uploadInput {
+  @apply hidden;
+}
+
+/* TEXT INPUT */
+.textInput {
+  @apply flex-1 px-2 py-2 border border-gray-300 
+         rounded-md text-sm md:text-base min-w-[120px];
+}
+
+/* BUTTON */
+.sendBtn {
+  @apply bg-blue-600 text-white px-2 py-2 md:px-3 
+         rounded-md font-semibold text-xs md:text-sm whitespace-nowrap;
+}

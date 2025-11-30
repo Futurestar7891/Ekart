@@ -1,0 +1,22 @@
+@reference "tailwindcss";
+
+.container {
+  @apply w-[92vw] min-h-screen mx-auto flex flex-col 
+         px-4 md:px-8 py-6 box-border;
+}
+
+.subtotal {
+  @apply flex justify-between items-center 
+         text-lg md:text-2xl font-bold 
+         border-b border-gray-300 pb-2 mb-4;
+}
+
+.items {
+  @apply flex flex-col gap-4 w-full;
+}
+
+.checkoutBtn {
+  @apply bg-blue-600 text-white font-semibold 
+         mt-4 py-3 rounded-lg shadow 
+         hover:bg-blue-700 transition-all;
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import Styles from "../Modules/FilteredProducts.module.css";
 import { AppContext } from "../Context/appContext";
 import ProductCard from "../Components/ProductCard";
 
@@ -6,22 +7,18 @@ function FilteredProducts() {
   const { filteredProducts, activeCategory, categoryFilters } =
     useContext(AppContext);
 
-  // Local state only (no cache)
   const [activeFilters, setActiveFilters] = useState({});
   const [sortOption, setSortOption] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  /* ------------ RESET FILTERS WHEN CATEGORY CHANGES ------------ */
   useEffect(() => {
     setActiveFilters({});
     setSortOption("");
   }, [activeCategory]);
 
-  /* ------------ GET POSSIBLE FILTERS FOR CATEGORY ------------ */
   const categoryFilterSet =
     categoryFilters.find((c) => c.category === activeCategory)?.filters || {};
 
-  /* ------------ TOGGLE FILTER ------------ */
   const toggleFilter = (key, value) => {
     setActiveFilters((prev) => {
       const current = prev[key] || [];
@@ -33,11 +30,9 @@ function FilteredProducts() {
     });
   };
 
-  /* ------------ APPLY FILTERS & SORT ------------ */
   const applyFilters = () => {
     let result = [...filteredProducts];
 
-    // Attribute filters
     Object.entries(activeFilters).forEach(([key, values]) => {
       if (values.length > 0) {
         result = result.filter((p) =>
@@ -46,7 +41,6 @@ function FilteredProducts() {
       }
     });
 
-    // Sorting
     if (sortOption === "priceLow") result.sort((a, b) => a.price - b.price);
     if (sortOption === "priceHigh") result.sort((a, b) => b.price - a.price);
     if (sortOption === "ratingLow") result.sort((a, b) => a.rating - b.rating);
@@ -58,50 +52,42 @@ function FilteredProducts() {
   const finalList = applyFilters();
 
   return (
-    <div style={{ display: "flex", marginTop: "140px", padding: "20px" }}>
-      {/* SIDEBAR */}
+    <div className={Styles.wrapper}>
+      {/* LEFT DESKTOP SIDEBAR */}
+      <div className={Styles.sidebar}>
+        <h3 className={Styles.filterTitle}>Filters</h3>
+
+        {Object.entries(categoryFilterSet).map(([key, values]) => (
+          <div key={key} className={Styles.filterGroup}>
+            <strong className={Styles.filterLabel}>{key}</strong>
+
+            <div className={Styles.filterOptions}>
+              {values.map((val) => (
+                <label key={val}>
+                  <input
+                    type="checkbox"
+                    checked={activeFilters[key]?.includes(val) || false}
+                    onChange={() => toggleFilter(key, val)}
+                  />{" "}
+                  {val}
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* MOBILE FULL SCREEN FILTERS */}
       {sidebarOpen && (
-        <div
-          style={{
-            width: "260px",
-            background: "#f8f8f8",
-            padding: "18px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            position: "sticky",
-            top: "120px",
-            height: "calc(100vh - 140px)",
-            overflowY: "auto",
-          }}
-        >
-          <h3 style={{ marginBottom: "10px" }}>
-            Filters
-            <button
-              onClick={() => setSidebarOpen(false)}
-              style={{
-                float: "right",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "18px",
-              }}
-            >
-              ✖
-            </button>
-          </h3>
+        <div className={Styles.sidebarMobile}>
+          <div className={Styles.sidebarHeader}>
+            <h3 className="text-lg font-semibold">Filters</h3>
+          </div>
 
           {Object.entries(categoryFilterSet).map(([key, values]) => (
-            <div key={key} style={{ marginBottom: "20px" }}>
-              <strong style={{ fontSize: "14px" }}>{key}</strong>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  rowGap: "6px",
-                  marginTop: "6px",
-                }}
-              >
+            <div key={key} className={Styles.filterGroup}>
+              <strong className={Styles.filterLabel}>{key}</strong>
+              <div className={Styles.filterOptions}>
                 {values.map((val) => (
                   <label key={val}>
                     <input
@@ -115,52 +101,60 @@ function FilteredProducts() {
               </div>
             </div>
           ))}
+
+          <button
+            className={Styles.applyBtn}
+            onClick={() => setSidebarOpen(false)}
+          >
+            Apply Filters
+          </button>
         </div>
       )}
 
-      {/* MAIN CONTENT */}
-      <div style={{ flex: 1, marginLeft: "20px", marginTop:"10px" }}>
-        {!sidebarOpen && (
+      {/* RIGHT CONTENT */}
+      <div className={Styles.main}>
+        {/* MOBILE sticky filters + sort */}
+        <div className={Styles.mobileTopRow}>
           <button
+            className={Styles.showFilterBtn}
             onClick={() => setSidebarOpen(true)}
-            style={{
-              marginBottom: "20px",
-              padding: "6px 12px",
-              fontSize: "14px",
-              borderRadius: "6px",
-            }}
           >
             Show Filters
           </button>
-        )}
 
-        <select
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
-          style={{
-            padding: "8px 12px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            marginBottom: "20px",
-          }}
-        >
-          <option value="">Sort By</option>
-          <option value="priceLow">Price: Low to High</option>
-          <option value="priceHigh">Price: High to Low</option>
-          <option value="ratingLow">Rating: Low to High</option>
-          <option value="ratingHigh">Rating: High to Low</option>
-        </select>
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className={Styles.sortSelectMobile}
+          >
+            <option value="">Sort By</option>
+            <option value="priceLow">Price: Low to High</option>
+            <option value="priceHigh">Price: High to Low</option>
+            <option value="ratingLow">Rating: Low to High</option>
+            <option value="ratingHigh">Rating: High to Low</option>
+          </select>
+        </div>
 
+        {/* DESKTOP sticky sort */}
+        <div className={Styles.sortWrapper}>
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className={Styles.sortSelectDesktop}
+          >
+            <option value="">Sort By</option>
+            <option value="priceLow">Price: Low to High</option>
+            <option value="priceHigh">Price: High to Low</option>
+            <option value="ratingLow">Rating: Low to High</option>
+            <option value="ratingHigh">Rating: High to Low</option>
+          </select>
+        </div>
+
+        {/* PRODUCT GRID */}
         {finalList.length === 0 ? (
           <h2>No products found</h2>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: "30px",
-            }}
-          >
+          <div className={Styles.productGrid}>
             {finalList.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}

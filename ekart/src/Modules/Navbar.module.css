@@ -1,0 +1,227 @@
+@reference "tailwindcss";
+
+/* =========================================================
+   1. HEADER WRAPPER
+========================================================= */
+.headerWrapper {
+  @apply w-full fixed top-0 left-0 z-50 bg-white shadow-md;
+}
+
+/* =========================================================
+   TOP NAV MAIN WRAPPER
+========================================================= */
+.topNav {
+  @apply w-full flex items-center
+         px-3 sm:px-5 py-3 
+         border-b border-gray-300 bg-white
+         gap-2;
+  min-height: 65px;
+}
+
+/* =========================================================
+   LOGO (30% → 20%)
+========================================================= */
+.logoSection {
+  @apply flex items-center shrink-0 
+         basis-[30%] md:basis-[20%];
+}
+
+.logoImage {
+  @apply w-[140px] sm:w-[150px] md:w-[180px] lg:w-[190px];
+}
+
+/* =========================================================
+   SEARCH (50% → 40%)
+========================================================= */
+.searchSection {
+  @apply flex items-center justify-center
+         min-w-0 px-1
+         basis-[50%] md:basis-[40%];
+}
+
+.searchInput {
+  @apply w-full py-2 px-3 
+         rounded-md border border-gray-300
+         bg-gray-100 outline-none
+         text-black text-sm sm:text-base
+         max-w-full sm:max-w-[350px] md:max-w-[420px] lg:max-w-[500px];
+}
+
+/* =========================================================
+   RIGHT SECTION (20% → 40%)
+========================================================= */
+.rightSection {
+  @apply flex items-center 
+         justify-center lg:justify-between
+         gap-3 sm:gap-4 md:gap-6 lg:gap-8
+         shrink-0
+         basis-[20%] md:basis-[40%]
+         pr-1 sm:pr-3 md:pr-5;
+}
+
+/* Desktop Links */
+.linksSection {
+  @apply hidden md:flex items-center gap-5;
+}
+
+.inactiveLink {
+  @apply text-gray-700 text-[15px] cursor-pointer font-medium;
+}
+
+.activeLink {
+  @apply text-blue-600 text-[17px] font-semibold cursor-pointer;
+}
+
+/* =========================================================
+   USER SECTION
+========================================================= */
+.userSection {
+  @apply flex items-center gap-3 sm:gap-4;
+}
+
+/* Cart (always show on desktop) */
+.cartIconWrapper {
+  @apply hidden md:flex relative cursor-pointer;
+}
+
+.cartIcon {
+  @apply w-[24px] h-[24px] text-black;
+}
+
+.cartCount {
+  @apply absolute -top-1 -right-1 bg-red-500 text-white
+         text-[10px] px-[4px] py-[1px] rounded-full;
+}
+
+/* Profile (desktop) */
+.profileWrapper {
+  @apply hidden md:flex items-center cursor-pointer;
+}
+
+.profileImage {
+  @apply w-[40px] h-[40px] md:w-[50px] md:h-[50px]
+         rounded-full object-cover;
+}
+
+.profileLetter,
+.mobileProfileLetter {
+  @apply w-[40px] h-[40px] md:w-[50px] md:h-[50px]
+         rounded-full bg-blue-600 text-white
+         flex items-center justify-center
+         text-lg font-bold;
+}
+
+/* ---------------------------------------------------------
+   DESKTOP SIGN IN (HIDDEN ON MOBILE)
+--------------------------------------------------------- */
+.signInBtn {
+  @apply hidden md:inline-block
+         py-2 px-4 
+         border border-gray-700 
+         rounded-md
+         text-gray-800 font-medium
+         bg-transparent
+         hover:bg-gray-100 transition;
+}
+
+/* MOBILE MENU BUTTON */
+.menuButton {
+  @apply block md:hidden text-3xl cursor-pointer;
+}
+
+/* =========================================================
+   3. MOBILE SLIDE MENU
+========================================================= */
+.mobileMenu {
+  @apply fixed top-[65px] right-0 
+         w-[30%]
+         max-[450px]:w-[40%]
+         sm:w-[60%]
+         md:w-[40%]
+         lg:w-[30%]
+         bg-white shadow-xl h-auto
+         p-5 flex flex-col gap-4
+         border-l border-gray-300 z-[999999]  /* highest */
+         md:hidden;
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+
+
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0%); }
+}
+
+/* Mobile basic nav items */
+.mobileItem {
+  @apply text-[16px] font-medium text-gray-800 cursor-pointer;
+}
+
+/* Mobile profile row */
+.mobileProfile {
+  @apply flex items-center gap-3 cursor-pointer;
+}
+
+.moblileCartProfileItem {
+  @apply flex items-center justify-between mt-4;
+}
+
+/* Mobile cart */
+.mobileCartIconWrapper {
+  @apply relative flex items-center justify-center cursor-pointer;
+}
+
+.mobileCartCircle {
+  @apply w-[40px] h-[40px] rounded-full bg-red-500 
+         flex items-center justify-center;
+}
+
+.mobileCartIcon {
+  @apply w-[20px] h-[20px] text-white;
+}
+
+.mobileCartCount {
+  @apply absolute -top-1 -right-1 bg-black text-white
+         text-[10px] px-[4px] py-[1px] rounded-full;
+}
+
+/* ---------------------------------------------------------
+   MOBILE SIGN-IN BUTTON (INSIDE SLIDE MENU)
+--------------------------------------------------------- */
+.mobileItemButton {
+  @apply w-full 
+         py-2 px-3 
+         bg-blue-600 text-white 
+         rounded-md text-center 
+         text-base font-medium 
+         hover:bg-blue-700 transition;
+}
+
+
+
+
+/* =========================================================
+   4. CATEGORY BAR
+========================================================= */
+.categoryBar {
+  @apply w-full bg-gray-900 py-2 px-3 sm:px-5 
+         overflow-x-auto whitespace-nowrap;
+}
+
+.categoryList {
+  @apply flex items-center gap-5 min-w-0;
+}
+
+.categoryItem {
+  @apply cursor-pointer;
+}
+
+.categoryLink {
+  @apply text-white text-[14px];
+}
+
+.categoryActive {
+  @apply text-yellow-400 text-[14px] font-semibold;
+}

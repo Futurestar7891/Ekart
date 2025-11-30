@@ -32,7 +32,7 @@ function Orders() {
       <h2 style={styles.title}>My Orders</h2>
 
       {orders.length === 0 ? (
-        <p style={styles.empty}>No orders found.</p>
+        <p style={styles.empty}>No orders found.(Beacuase We are adding the Products using Web hooks to maintain ACID payment properties so web hook not applicable for free tier on Vercel.)</p>
       ) : (
         orders.map((order) => (
           <div key={order._id} style={styles.card}>
