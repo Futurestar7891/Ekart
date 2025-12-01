@@ -31,14 +31,24 @@ app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
 app.use(cookieParser());
 
-setInterval(async () => {
-  try {
-    await fetch("https://ekart-1-lyec.onrender.com");
-    console.log("🔥 Server pinged to prevent cold start");
-  } catch (err) {
-    console.log("Ping failed:", err.message);
-  }
-}, 5 * 60 * 1000); 
+
+setInterval(() => {
+  fetch("https://ekart-1-lyec.onrender.com")
+    .then(() => {
+      console.log("ping the server");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}, 5 * 60 * 1000);
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "server awaked",
+  });
+});
+
 
 /* ------------------------ WEBHOOK (must come BEFORE stripe JSON parsing) ------------------------ */
 app.use("/api", webhookRoutes);

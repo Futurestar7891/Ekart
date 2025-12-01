@@ -18,7 +18,7 @@
          items-center justify-between
          bg-gray-100
          px-4 sm:px-8 lg:px-20
-         py-3 sm:py-10 lg:py-14
+         py-4 sm:py-10 lg:py-14
          gap-6;
   /* height is fully dynamic */
 }
