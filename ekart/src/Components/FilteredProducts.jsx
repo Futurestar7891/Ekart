@@ -2,9 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import Styles from "../Modules/FilteredProducts.module.css";
 import { AppContext } from "../Context/appContext";
 import ProductCard from "../Components/ProductCard";
+import FilteredShimmer from "../Components/FilteredShimmer";
 
 function FilteredProducts() {
-  const { filteredProducts, activeCategory, categoryFilters } =
+  const { filteredProducts, activeCategory, categoryFilters, productsLoading } =
     useContext(AppContext);
 
   const [activeFilters, setActiveFilters] = useState({});
@@ -18,6 +19,14 @@ function FilteredProducts() {
 
   const categoryFilterSet =
     categoryFilters.find((c) => c.category === activeCategory)?.filters || {};
+
+  if (productsLoading) {
+    return (
+      <div className="mt-[70px] p-4">
+        <FilteredShimmer />
+      </div>
+    );
+  }
 
   const toggleFilter = (key, value) => {
     setActiveFilters((prev) => {
