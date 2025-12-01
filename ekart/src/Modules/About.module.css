@@ -1,0 +1,120 @@
+@reference "tailwindcss";
+
+/* MAIN SECTION WITH FIXED HEIGHT */
+.aboutSection {
+  height: calc(100vh - 70px);
+  @apply w-full flex justify-center items-start bg-gray-100 mt-[70px] py-[10px];
+}
+
+/* WRAPPER – MOBILE = SINGLE COLUMN SCROLL | DESKTOP = GRID */
+.wrapper {
+  @apply w-full max-w-7xl h-full px-4 gap-6 overflow-y-auto;
+
+  /* MOBILE defaults to single column with unified scroll */
+  display: flex;
+  flex-direction: column;
+
+  /* DESKTOP – 2 columns */
+  @apply md:grid md:grid-cols-2 md:gap-6 md:overflow-hidden;
+}
+
+/* LEFT & RIGHT COLUMN – SCROLL ONLY ON DESKTOP */
+.leftColumn,
+.rightColumn {
+  @apply w-full flex flex-col gap-6;
+
+  /* No scroll on mobile */
+  overflow: visible;
+
+  /* Desktop: each column scrolls independently */
+  @apply md:overflow-y-auto md:pb-6;
+}
+
+/* CARD */
+.card {
+  @apply bg-white rounded-xl shadow-md border border-gray-200 p-6;
+}
+
+/* TITLES */
+.cardTitle {
+  @apply text-2xl font-bold text-gray-900 mb-3;
+}
+
+/* TEXT */
+.cardText {
+  @apply text-gray-700 text-base leading-relaxed mb-2;
+}
+
+.highlight {
+  @apply text-blue-600 font-semibold;
+}
+
+/* EXPERIENCE */
+.expItem {
+  @apply mb-3;
+}
+
+.expRole {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.expCompany {
+  @apply text-sm text-gray-500;
+}
+
+.expDesc {
+  @apply text-gray-700 text-sm mt-1;
+}
+
+/* CODING PROFILES */
+.linkList {
+  @apply list-disc pl-5 space-y-1 text-gray-700;
+}
+
+.link {
+  @apply text-blue-600 hover:underline;
+}
+
+/* SKILLS */
+.chipContainer {
+  @apply flex flex-wrap gap-2 mt-2;
+}
+
+.chip {
+  @apply text-sm px-3 py-1 rounded-full bg-blue-50 
+         text-blue-700 border border-blue-200;
+}
+
+/* PROJECTS */
+.projectBox {
+  @apply mb-4;
+}
+
+.projectTitle {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.projectDesc {
+  @apply text-gray-700 text-sm mt-1;
+}
+
+.projectLink {
+  @apply text-blue-600 hover:underline cursor-pointer;
+}
+
+/* BUTTONS */
+/* BUTTONS */
+.linksRow {
+  @apply flex flex-wrap gap-4 mt-3 justify-start;
+}
+
+.primaryBtn {
+  @apply bg-blue-600 text-white px-5 py-2 rounded-lg 
+         font-medium shadow hover:bg-blue-700 transition;
+}
+
+.secondaryBtn {
+  @apply bg-white border border-gray-300 text-gray-800 px-5 py-2 
+         rounded-lg font-medium shadow hover:bg-gray-100 transition;
+}
+

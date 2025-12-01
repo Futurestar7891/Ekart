@@ -2,13 +2,13 @@
 
 /* Outer container */
 .container {
-  @apply w-full overflow-hidden mt-26;
+  @apply w-full overflow-hidden mt-[36px];
 }
 
 
 /* Wrapper that slides */
 .wrapper {
-  @apply flex transition-transform duration-500 ease-in-out border border-blue-300;
+  @apply flex transition-transform duration-500 ease-in-out ;
 }
 
 /* Each slide — desktop layout ALWAYS */

@@ -68,9 +68,14 @@ function SignIn() {
       const data = await res.json();
 
       if (!data.success) {
-        setErrors({ general: data.message || "Invalid credentials" });
+        if (data.errors) {
+          setErrors(data.errors); // <--- SHOW FIELD ERRORS!
+        } else {
+          setErrors({ general: data.message || "Invalid credentials" });
+        }
         return;
       }
+
 
       setUser(data.user);
       setIsLoggedIn(true);

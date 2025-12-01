@@ -1,29 +1,28 @@
 @reference "tailwindcss";
 
 /* =========================================================
-   1. HEADER WRAPPER
+   HEADER WRAPPER
 ========================================================= */
 .headerWrapper {
   @apply w-full fixed top-0 left-0 z-50 bg-white shadow-md;
 }
 
 /* =========================================================
-   TOP NAV MAIN WRAPPER
+   TOP NAV
 ========================================================= */
 .topNav {
   @apply w-full flex items-center
          px-3 sm:px-5 py-3 
          border-b border-gray-300 bg-white
          gap-2;
-  min-height: 65px;
+  height: 70px;
 }
 
 /* =========================================================
-   LOGO (30% → 20%)
+   LOGO
 ========================================================= */
 .logoSection {
-  @apply flex items-center shrink-0 
-         basis-[30%] md:basis-[20%];
+  @apply flex items-center shrink-0 basis-[30%] md:basis-[20%];
 }
 
 .logoImage {
@@ -31,12 +30,11 @@
 }
 
 /* =========================================================
-   SEARCH (50% → 40%)
+   SEARCH
 ========================================================= */
 .searchSection {
-  @apply flex items-center justify-center
-         min-w-0 px-1
-         basis-[50%] md:basis-[40%];
+  @apply relative flex items-center justify-center
+         min-w-0 px-1 basis-[50%] md:basis-[40%];
 }
 
 .searchInput {
@@ -47,15 +45,24 @@
          max-w-full sm:max-w-[350px] md:max-w-[420px] lg:max-w-[500px];
 }
 
+/* DESKTOP suggestion */
+.desktopSuggestionWrapper {
+  @apply hidden md:block w-full absolute left-0 top-[-25px];
+}
+
+/* MOBILE suggestion */
+.mobileSuggestionWrapper {
+  @apply block md:hidden fixed top-[70px] w-full px-2 z-40 left-[-10px];
+}
+
 /* =========================================================
-   RIGHT SECTION (20% → 40%)
+   RIGHT SECTION
 ========================================================= */
 .rightSection {
   @apply flex items-center 
          justify-center lg:justify-between
          gap-3 sm:gap-4 md:gap-6 lg:gap-8
-         shrink-0
-         basis-[20%] md:basis-[40%]
+         shrink-0 basis-[20%] md:basis-[40%]
          pr-1 sm:pr-3 md:pr-5;
 }
 
@@ -79,7 +86,7 @@
   @apply flex items-center gap-3 sm:gap-4;
 }
 
-/* Cart (always show on desktop) */
+/* Cart */
 .cartIconWrapper {
   @apply hidden md:flex relative cursor-pointer;
 }
@@ -93,14 +100,13 @@
          text-[10px] px-[4px] py-[1px] rounded-full;
 }
 
-/* Profile (desktop) */
+/* Profile circle */
 .profileWrapper {
   @apply hidden md:flex items-center cursor-pointer;
 }
 
 .profileImage {
-  @apply w-[40px] h-[40px] md:w-[50px] md:h-[50px]
-         rounded-full object-cover;
+  @apply w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-full object-cover;
 }
 
 .profileLetter,
@@ -111,55 +117,43 @@
          text-lg font-bold;
 }
 
-/* ---------------------------------------------------------
-   DESKTOP SIGN IN (HIDDEN ON MOBILE)
---------------------------------------------------------- */
+/* Sign in button desktop */
 .signInBtn {
-  @apply hidden md:inline-block
-         py-2 px-4 
-         border border-gray-700 
-         rounded-md
+  @apply hidden md:inline-block py-2 px-4 
+         border border-gray-700 rounded-md
          text-gray-800 font-medium
-         bg-transparent
-         hover:bg-gray-100 transition;
+         bg-transparent hover:bg-gray-100 transition;
 }
 
-/* MOBILE MENU BUTTON */
+/* Hamburger */
 .menuButton {
   @apply block md:hidden text-3xl cursor-pointer;
 }
 
 /* =========================================================
-   3. MOBILE SLIDE MENU
+   MOBILE SLIDE MENU
 ========================================================= */
 .mobileMenu {
-  @apply fixed top-[65px] right-0 
-         w-[30%]
-         max-[450px]:w-[40%]
-         sm:w-[60%]
-         md:w-[40%]
-         lg:w-[30%]
+  @apply fixed top-[70px] right-0 
+         w-[30%] max-[450px]:w-[40%] sm:w-[60%]
          bg-white shadow-xl h-auto
          p-5 flex flex-col gap-4
-         border-l border-gray-300 z-[999999]  /* highest */
+         border-l border-gray-300
+         z-[999999]
          md:hidden;
   animation: slideIn 0.3s ease-out forwards;
 }
-
-
-
 
 @keyframes slideIn {
   from { transform: translateX(100%); }
   to   { transform: translateX(0%); }
 }
 
-/* Mobile basic nav items */
 .mobileItem {
   @apply text-[16px] font-medium text-gray-800 cursor-pointer;
 }
 
-/* Mobile profile row */
+/* Mobile profile */
 .mobileProfile {
   @apply flex items-center gap-3 cursor-pointer;
 }
@@ -168,7 +162,7 @@
   @apply flex items-center justify-between mt-4;
 }
 
-/* Mobile cart */
+/* Mobile Cart */
 .mobileCartIconWrapper {
   @apply relative flex items-center justify-center cursor-pointer;
 }
@@ -187,41 +181,10 @@
          text-[10px] px-[4px] py-[1px] rounded-full;
 }
 
-/* ---------------------------------------------------------
-   MOBILE SIGN-IN BUTTON (INSIDE SLIDE MENU)
---------------------------------------------------------- */
+/* Mobile Sign-in */
 .mobileItemButton {
-  @apply w-full 
-         py-2 px-3 
-         bg-blue-600 text-white 
-         rounded-md text-center 
+  @apply w-full py-2 px-3 
+         bg-blue-600 text-white rounded-md text-center 
          text-base font-medium 
          hover:bg-blue-700 transition;
-}
-
-
-
-
-/* =========================================================
-   4. CATEGORY BAR
-========================================================= */
-.categoryBar {
-  @apply w-full bg-gray-900 py-2 px-3 sm:px-5 
-         overflow-x-auto whitespace-nowrap;
-}
-
-.categoryList {
-  @apply flex items-center gap-5 min-w-0;
-}
-
-.categoryItem {
-  @apply cursor-pointer;
-}
-
-.categoryLink {
-  @apply text-white text-[14px];
-}
-
-.categoryActive {
-  @apply text-yellow-400 text-[14px] font-semibold;
 }

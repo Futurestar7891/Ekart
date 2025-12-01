@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from "react";
+// src/components/Navbar.jsx
+import React, { useEffect, useState, useContext } from "react";
 import styles from "../Modules/Navbar.module.css";
 import Logo from "../assets/Logo.png";
 import { AppContext } from "../Context/appContext";
-import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Suggestionbox from "./Suggesionbox";
 import Profile from "../Screen/ProtectedScreens/Profile";
-import Shimmer from "../Shimmer";
 import { ShoppingCart } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const {
     isLoggedIn,
-    categoriesLoading,
-    categories,
-    setFilteredProducts,
     products,
     setSearch,
     setActiveCategory,
-    activeCategory,
     user,
     setUser,
     setIsLoggedIn,
@@ -37,30 +32,20 @@ const Navbar = () => {
     setCartCount(Array.isArray(cartarray) ? cartarray.length : 0);
   }, [cartarray]);
 
-  const filterCategory = (cat) => {
-    const category = cat.trim();
-    setActiveCategory(category);
-
-    if (category === "All") return setFilteredProducts(products);
-
-    setFilteredProducts(
-      products.filter((p) => p.category?.trim() === category)
-    );
-  };
-
   const getLetterAvatar = () =>
     user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
     <header className={styles.headerWrapper}>
-      {/* TOP NAVBAR */}
+      {/* TOP NAV */}
       <section className={styles.topNav}>
         {/* LOGO */}
         <div className={styles.logoSection} onClick={() => navigate("/")}>
           <img src={Logo} alt="logo" className={styles.logoImage} />
         </div>
 
-        {/* SEARCH */}
+        {/* SEARCH SECTION */}
+        {/* SEARCH SECTION */}
         <div className={styles.searchSection}>
           <input
             type="text"
@@ -70,6 +55,23 @@ const Navbar = () => {
             className={styles.searchInput}
           />
 
+          {/* DESKTOP Suggestions */}
+          <div className={styles.desktopSuggestionWrapper}>
+            <Suggestionbox
+              query={searchText}
+              products={products}
+              setSearch={(txt) => {
+                setSearch(txt);
+                sessionStorage.setItem("search", txt);
+              }}
+              setSearchText={setSearchText}
+              setActiveCategory={setActiveCategory}
+            />
+          </div>
+        </div>
+
+        {/* MOBILE Suggestions */}
+        <div className={styles.mobileSuggestionWrapper}>
           <Suggestionbox
             query={searchText}
             products={products}
@@ -84,7 +86,7 @@ const Navbar = () => {
 
         {/* RIGHT SECTION */}
         <div className={styles.rightSection}>
-          {/* DESKTOP LINKS */}
+          {/* Desktop Links */}
           <div className={styles.linksSection}>
             <NavLink
               onClick={() => localStorage.setItem("activelink", "Home")}
@@ -98,7 +100,7 @@ const Navbar = () => {
 
             <NavLink
               onClick={() => localStorage.setItem("activelink", "About")}
-              to="/orders"
+              to="/about"
               className={
                 activelink === "About" ? styles.activeLink : styles.inactiveLink
               }
@@ -107,21 +109,21 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
-              onClick={() => localStorage.setItem("activelink", "Contact")}
-              to="#"
+              onClick={() => localStorage.setItem("activelink", "Showcase")}
+              to="/showcase"
               className={
-                activelink === "Contact"
+                activelink === "Showcase"
                   ? styles.activeLink
                   : styles.inactiveLink
               }
             >
-              Contact
+              Showcase
             </NavLink>
           </div>
 
           {/* USER SECTION */}
           <div className={styles.userSection}>
-            {/* CART — ONLY WHEN LOGGED IN */}
+            {/* CART */}
             {isLoggedIn && (
               <div
                 className={styles.cartIconWrapper}
@@ -132,7 +134,7 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* PROFILE (deskop) — ONLY WHEN LOGGED IN */}
+            {/* PROFILE */}
             {isLoggedIn ? (
               <div
                 className={styles.profileWrapper}
@@ -147,7 +149,6 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              // SIGN IN (desktop)
               <button
                 onClick={() => navigate("/signin")}
                 className={styles.signInBtn}
@@ -156,7 +157,7 @@ const Navbar = () => {
               </button>
             )}
 
-            {/* MOBILE MENU BUTTON */}
+            {/* MOBILE MENU ICON */}
             <span
               className={styles.menuButton}
               onClick={() => setMenuOpen(!menuOpen)}
@@ -189,7 +190,7 @@ const Navbar = () => {
             }
             onClick={() => {
               localStorage.setItem("activelink", "About");
-              navigate("/orders");
+              navigate("/about");
               setMenuOpen(false);
             }}
           >
@@ -198,19 +199,20 @@ const Navbar = () => {
 
           <p
             className={
-              activelink === "Contact" ? styles.activeLink : styles.inactiveLink
+              activelink === "Showcase"
+                ? styles.activeLink
+                : styles.inactiveLink
             }
             onClick={() => {
-              localStorage.setItem("activelink", "Contact");
+              localStorage.setItem("activelink", "Showcase");
+              navigate("/showcase");
               setMenuOpen(false);
             }}
           >
-            Contact
+            Showcase
           </p>
 
-          {/* MOBILE CART + PROFILE */}
           <div className={styles.moblileCartProfileItem}>
-            {/* CART ONLY IF LOGGED IN */}
             {isLoggedIn && (
               <div
                 className={styles.mobileCartIconWrapper}
@@ -222,12 +224,10 @@ const Navbar = () => {
                 <div className={styles.mobileCartCircle}>
                   <ShoppingCart className={styles.mobileCartIcon} />
                 </div>
-
                 <span className={styles.mobileCartCount}>{cartcount}</span>
               </div>
             )}
 
-            {/* PROFILE ONLY IF LOGGED IN */}
             {isLoggedIn ? (
               <div
                 className={styles.mobileProfile}
@@ -245,7 +245,6 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              // SIGN IN BUTTON (mobile)
               <button
                 onClick={() => {
                   navigate("/signin");
@@ -260,32 +259,7 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* CATEGORY BAR */}
-      <div className={styles.categoryBar}>
-        <ul className={styles.categoryList}>
-          {categoriesLoading
-            ? Array.from({ length: 8 }).map((_, i) => (
-                <li key={i} className={styles.categoryItem}>
-                  <Shimmer height="25px" width="60px" />
-                </li>
-              ))
-            : categories.map((cat, idx) => (
-                <li key={idx} className={styles.categoryItem}>
-                  <span
-                    onClick={() => filterCategory(cat)}
-                    className={
-                      activeCategory === cat.trim()
-                        ? styles.categoryActive
-                        : styles.categoryLink
-                    }
-                  >
-                    {cat}
-                  </span>
-                </li>
-              ))}
-        </ul>
-      </div>
-
+      {/* PROFILE PANEL */}
       {showProfile && (
         <Profile
           user={user}

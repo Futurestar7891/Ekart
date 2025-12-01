@@ -1,7 +1,7 @@
 @reference "tailwindcss";
 
 .container {
-  @apply w-[92vw] min-h-screen mx-auto flex flex-col 
+  @apply w-[100vw] min-h-screen mx-auto flex flex-col 
          px-4 md:px-8 py-6 box-border;
 }
 

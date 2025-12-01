@@ -1,10 +1,18 @@
 const API = import.meta.env.VITE_API;
 export const fetchProducts = async () => {
+
+   const controller = new AbortController();
+
+   const timeoutId = setTimeout(() => {
+     controller.abort();
+   }, 15000);
+
   try {
     const res = await fetch(`${API}/products`, {
       method: "GET",
+      signal: controller.signal,
     });
-
+    clearTimeout(timeoutId);
     const data = await res.json();
 
     return data.products || [];
@@ -15,11 +23,18 @@ export const fetchProducts = async () => {
 };
 
 export const fetchFilters = async () => {
+     const controller = new AbortController();
+
+     const timeoutId = setTimeout(() => {
+       controller.abort();
+     }, 15000);
+
   try {
     const res = await fetch(`${API}/products/filters`, {
       method: "GET",
+      signal: controller.signal,
     });
-
+     clearTimeout(timeoutId);
     const data = await res.json();
 
     return data.filters || [];

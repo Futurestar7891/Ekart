@@ -3,6 +3,8 @@ import React, { createContext, useState, useEffect } from "react";
 export const AppContext = createContext();
 
 function ContextProvider({ children }) {
+  const [loading,setLoading]=useState(true);
+  const [error,setError]=useState("");
   const [isLoggedIn, setIsLoggedIn] = useState("loading");
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [productsLoading, setProductsLoading] = useState(true);
@@ -55,6 +57,13 @@ function ContextProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
+
+        loading,
+        setLoading,
+
+        error,
+        setError,
+
         isLoggedIn,
         setIsLoggedIn,
 
@@ -71,7 +80,7 @@ function ContextProvider({ children }) {
         setProducts,
 
         filteredProducts,
-        setFilteredProducts, // in case you need manual override sometimes
+        setFilteredProducts, 
 
         categories,
         setCategories,

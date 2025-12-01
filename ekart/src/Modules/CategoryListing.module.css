@@ -1,0 +1,23 @@
+@reference "tailwindcss";
+
+/* Sticky separate category bar */
+.categoryBar {
+  @apply w-full flex items-center bg-gray-900 py-2 px-2 sm:px-5 h-[36px]
+         sticky top-[70px]  z-40;
+}
+
+.categoryList {
+  @apply w-full  flex items-center  overflow-x-auto whitespace-nowrap gap-5 min-w-0  px-3;
+}
+
+.categoryItem {
+  @apply cursor-pointer;
+}
+
+.categoryLink {
+  @apply text-white text-[14px];
+}
+
+.categoryActive {
+  @apply text-yellow-400 text-[14px] font-semibold;
+}

@@ -5,10 +5,26 @@ import Products from "../../Components/Products";
 import FilteredProducts from "../../Components/FilteredProducts";
 import { AppContext } from "../../Context/appContext";
 import { fetchCart } from "../../Utils/Cart";
+import CategoryListing from "../../Components/CategoryListing";
+import LoadingBar from "../../Components/LoadingBar";
+import Reload from "../../Components/Reload";
+import { checkAuth } from "../../Utils/User";
+
 
 function Home() {
-  const { activeCategory, setCartArray, isLoggedIn } = useContext(AppContext);
+  const {
+    activeCategory,
+    setCartArray,
+    isLoggedIn,
+    loading,
+    error,
+    setLoading,
+    setError,
+    setIsLoggedIn,
+    setUser,
+  } = useContext(AppContext);
 
+  /* ---------------- CART LOAD ---------------- */
   useEffect(() => {
     async function load() {
       if (!isLoggedIn) {
@@ -17,20 +33,37 @@ function Home() {
       }
 
       const items = await fetchCart();
-
-      if (Array.isArray(items)) {
-        setCartArray(items);
-      }
+      if (Array.isArray(items)) setCartArray(items);
     }
 
     load();
-  }, [isLoggedIn]); // 🔥 Re-run only when login status changes
+  }, [isLoggedIn]);
+
+  /* ---------------- SET ACTIVE NAV ---------------- */
+  useEffect(() => {
+    localStorage.setItem("activelink", "Home");
+  }, []);
 
   return (
     <div style={{ width: "100%" }}>
       <Navbar />
-      {activeCategory === "All" && <Carausel />}
-      {activeCategory !== "All" ? <FilteredProducts /> : <Products />}
+      {loading && <LoadingBar />}
+      {!loading && error.length > 0 && (
+        <Reload
+          error={error}
+          onRetry={() =>
+            checkAuth(setLoading, setError, setIsLoggedIn, setUser )
+          }
+        />
+      )}
+
+      {!loading && error.length === 0 && (
+        <>
+          <CategoryListing />
+          {activeCategory === "All" && <Carausel />}
+          {activeCategory !== "All" ? <FilteredProducts /> : <Products />}
+        </>
+      )}
     </div>
   );
 }

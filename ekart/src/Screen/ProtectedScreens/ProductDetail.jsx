@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../Context/appContext";
-
+import Navbar from "../../Components/Navbar";
 import ProductImagesAndInfo from "../../Components/ProductImageAndInfo";
 import RelatedProducts from "../../Components/RelatedProducts";
 import ProductReviews from "../../Components/ProductReviews";
@@ -13,6 +13,8 @@ function ProductDetail() {
 
   const [currentProduct, setCurrentProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
+
+  const detailRef = useRef(null); // <-- NEW (focus target)
 
   /* ---------------- LOAD PRODUCT ---------------- */
   useEffect(() => {
@@ -30,15 +32,23 @@ function ProductDetail() {
       (p) =>
         p.category === currentProduct.category && p._id !== currentProduct._id
     );
-
     setRelatedProducts(related);
   }, [currentProduct, products]);
 
-  /* ---------------- STRUCTURED SHIMMER (LIKE PRODUCT UI) ---------------- */
+  /* ---------------- AUTO SCROLL TO PRODUCT DETAIL ---------------- */
+  useEffect(() => {
+    if (!productsLoading && currentProduct && detailRef.current) {
+      detailRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [productsLoading, currentProduct]);
+
+  /* ---------------- SHIMMER LOADING UI ---------------- */
   if (productsLoading || !currentProduct) {
     return (
       <div style={loader.container}>
-        {/* LEFT SIDE */}
         <div style={loader.left}>
           <Shimmer width="100%" height="70vh" radius="12px" />
 
@@ -50,7 +60,6 @@ function ProductDetail() {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
         <div style={loader.right}>
           <Shimmer width="70%" height="30px" radius="6px" />
           <Shimmer width="90%" height="18px" radius="6px" />
@@ -71,11 +80,12 @@ function ProductDetail() {
 
   /* ---------------- REAL UI ---------------- */
   return (
-    <div>
-      <ProductImagesAndInfo product={currentProduct} />
-      <RelatedProducts relatedProducts={relatedProducts} />
-      <ProductReviews product={currentProduct} />
-    </div>
+    
+      <div ref={detailRef}>
+        <ProductImagesAndInfo product={currentProduct} />
+        <RelatedProducts relatedProducts={relatedProducts} />
+        <ProductReviews product={currentProduct} />
+      </div>
   );
 }
 

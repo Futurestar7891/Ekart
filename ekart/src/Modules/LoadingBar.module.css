@@ -1,0 +1,42 @@
+@reference "tailwindcss";
+
+/* WRAPPER BELOW NAVBAR */
+.loaderWrapper {
+  height: calc(100vh - 70px);
+  @apply w-full flex flex-col justify-center items-center bg-gray-50  mt-[70px];
+}
+
+/* TEXT CENTERING */
+.loadingText {
+  @apply text-center text-gray-700 text-base font-medium leading-relaxed;
+}
+
+/* DOTS ANIMATION */
+.dots {
+  @apply flex gap-2 mt-3;
+}
+
+.dots::before,
+.dots::after,
+.dots div {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: #2563eb;
+  border-radius: 50%;
+  opacity: 0.25;
+  animation: blink 1.4s infinite ease-in-out;
+}
+
+.dots div {
+  animation-delay: 0.2s;
+}
+
+.dots::after {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}

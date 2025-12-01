@@ -31,6 +31,15 @@ app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
 app.use(cookieParser());
 
+setInterval(async () => {
+  try {
+    await fetch("https://ekart-1-lyec.onrender.com");
+    console.log("🔥 Server pinged to prevent cold start");
+  } catch (err) {
+    console.log("Ping failed:", err.message);
+  }
+}, 5 * 60 * 1000); 
+
 /* ------------------------ WEBHOOK (must come BEFORE stripe JSON parsing) ------------------------ */
 app.use("/api", webhookRoutes);
 // ⚠️ This must stay above other routes but after JSON parser

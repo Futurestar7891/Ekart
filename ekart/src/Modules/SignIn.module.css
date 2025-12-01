@@ -1,28 +1,34 @@
 @reference "tailwindcss";
 
-.imageWrapper {
-  @apply flex justify-center order-1 md:order-none;
+/* PAGE WRAPPER */
+.page {
+  @apply min-h-screen flex items-center justify-center bg-gray-50 px-4;
 }
 
-.grid{
-  @apply bg-white p-6 md:p-8 rounded-2xl shadow-lg 
-         w-full max-w-[420px] 
-         order-2;
+/* GRID LAYOUT */
+.grid {
+  @apply grid 
+  grid-cols-1 
+  md:grid-cols-2 
+  gap-10 
+  items-center 
+  max-w-5xl 
+  w-full;
 }
 
 /* IMAGE */
 .imageWrapper {
-  @apply flex justify-center order-1 md:order-none;
+  @apply flex justify-center md:justify-start;
 }
 
 .image {
-  @apply w-full max-w-[480px] rounded-xl;
+  @apply w-full max-w-[480px] rounded-xl object-contain;
 }
 
 /* FORM */
 .card {
   @apply bg-white p-6 md:p-8 rounded-2xl shadow-lg 
-         w-full max-w-[420px];
+    w-full max-w-md mx-auto;
 }
 
 /* TEXT */

@@ -1,6 +1,7 @@
 import { useEffect, useContext, lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AppContext } from "./Context/appContext";
+import { checkAuth } from "./Utils/User";
 // import Shimmer from "./Shimmer";
 import ProtectedRoutes from "./routes/protectedRoutes";
 
@@ -18,13 +19,17 @@ const SignIn = lazy(() => import("./Screen/publicScreens/signIn"));
 const ResetPassword = lazy(() =>
   import("./Screen/publicScreens/ResetPassword")
 );
+const About=lazy(()=>import("./Screen/publicScreens/About"));
+const Showcase=lazy(()=>import("./Screen/publicScreens/Showcase"))
 const Settings = lazy(() => import("./Screen/ProtectedScreens/Settings"));
 
 import { fetchProducts, fetchFilters } from "./Utils/Products";
 
 function App() {
-  const API = import.meta.env.VITE_API;
+
   const {
+    setLoading,
+    setError,
     isLoggedIn,
     setIsLoggedIn,
     setProductsLoading,
@@ -35,34 +40,15 @@ function App() {
     setCategoryFilters,
   } = useContext(AppContext);
 
+  
+
+
   /* ---------------- AUTH CHECK ---------------- */
   useEffect(() => {
-    async function verify() {
-      try {
-        const res = await fetch(`${API}/auth/check`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        const data = await res.json();
-
-        if (data.loggedIn) {
-          setIsLoggedIn(true);
-          setUser(data.user);
-        } else {
-          setIsLoggedIn(false);
-          setUser(null);
-        }
-      } catch (err) {
-        console.log("Auth check failed:", err);
-        setIsLoggedIn(false);
-      }
-    }
-
-    verify();
+    checkAuth(setLoading, setError, setIsLoggedIn, setUser);
   }, []);
 
-  /* ---------------- LOAD PRODUCTS ---------------- */
+
   /* ---------------- LOAD PRODUCTS ---------------- */
   useEffect(() => {
     async function loadProducts() {
@@ -100,7 +86,7 @@ function App() {
     }
 
     loadProducts();
-  }, []);
+  }, [isLoggedIn]);
 
   /* ---------------- LOAD FILTER OPTIONS ---------------- */
   useEffect(() => {
@@ -110,7 +96,7 @@ function App() {
     }
 
     loadFilters();
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <div style={{ width: "100vw" }}>
@@ -118,6 +104,8 @@ function App() {
         <Routes>
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About/>}/>
+          <Route path="/showcase" element={<Showcase/>}/>
           <Route path="/product/detail/:id" element={<ProductDetail />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
